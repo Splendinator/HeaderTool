@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\CodeParseTokens">
+      <UniqueIdentifier>{3007e03b-97ce-4ce7-9713-2eec36073821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CodeParseTokenFactories">
+      <UniqueIdentifier>{163c384a-ef70-4623-8bc8-d0c815359ae4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenBase.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenClass.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenPropertyBase.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenPropertyFloat.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenScope.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenDelimiter.cpp">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenFactoryBase.cpp">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenFactoryClass.cpp">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenFactoryProperty.cpp">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeParseTokenFactoryScope.cpp">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HeaderTool.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenBase.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenClass.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenPropertyBase.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenPropertyFloat.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenScope.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenDelimiter.h">
+      <Filter>Source Files\CodeParseTokens</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenFactoryBase.h">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenFactoryClass.h">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenFactoryProperty.h">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeParseTokenFactoryScope.h">
+      <Filter>Source Files\CodeParseTokenFactories</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
