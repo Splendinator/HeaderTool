@@ -23,6 +23,9 @@ private:
 	// Parse a code file and get all the tokens
 	void Parse(std::string codeFile);
 
+	// Sort the tokens in a sensible order such that dependencies are handled. (parent class before child etc.)
+	void SortCodeParseTokens();
+
 	// Break down a parse string into smaller substrings that are usefor for more finely parsing the string if the code has a lot of things without spaces in.
 	// i.e "GetSomething(){return;};" might return "GetSomething", "(", ")", "{", "return", ";", "}"
 	std::vector<std::string> BreakDownParseString(const std::string& parseString) const;

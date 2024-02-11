@@ -15,6 +15,8 @@ public:
 	
 	//~ Begin CodeParseTokenBase Interface
 	virtual void WriteToFile(std::ofstream& outputFile) override;
+	virtual std::string GetSatisfiedDependency() const { return structName; }
+	virtual std::string GetRequiredDependency() const { return baseStruct; }
 	//~ End CodeParseTokenBase Interface
 	
 	std::string structName;

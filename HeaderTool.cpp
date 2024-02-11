@@ -13,11 +13,19 @@
 
 #include <filesystem>
 #include <fstream>
+#include <set>
 #include <sstream>
 
 #include "CodeParseTokenFactoryStruct.h"
 #include "CodeParseTokenPropertyBase.h"
 #include "CodeParseTokenStruct.h"
+
+#include "../../../../../VulkanSDK/1.2.198.1/Include/vulkan/vulkan_core.h"
+
+#include "DomWindow/DomWindow.h"
+
+// #TEMP: Optimisation
+#pragma optimize("", off)
 
 void HeaderTool::Run()
 {
@@ -38,6 +46,8 @@ void HeaderTool::CollateTypesToFile(const std::string& codeDirectory, const std:
 		std::cout << path.filename() << std::endl;
 		Parse(codeFile);
 	}
+
+	SortCodeParseTokens();
 
 	// Write to file
 	std::ofstream outputFile(codeDirectory + "\\" + typesFile);
@@ -176,6 +186,84 @@ void HeaderTool::Parse(std::string codeFile)
 	}
 	
 	DOMLOG_ERROR_IF(!activeScopedFactories.empty(), "Scoped factories not detecting end of scope?")
+}
+
+void HeaderTool::SortCodeParseTokens()
+{
+	std::vector<CodeParseTokenBase*> sortedTokens;
+	sortedTokens.reserve(allTokens.size());
+
+	std::set<std::string> satisfiedDependencies; // Ever growing vector of satisfied dependencies
+
+	// While tokens remain...
+	while (!allTokens.empty())
+	{
+		int numTokensBeforeLoop = allTokens.size();
+		int tokenIndex = numTokensBeforeLoop - 2; // Last token will be delimiter, so skip it
+		int lastSegmentIndex = numTokensBeforeLoop - 1; 
+		std::set<std::string> requiredDependencies;
+
+		while (tokenIndex >= -1) // use "-1" so we can tell if we've reached the end (vs hitting a delimiter)
+		{
+			// Iterate all tokens backwards, finding segments (between delimiters and EOF) that can be added.
+			
+			CodeParseTokenBase* pToken = tokenIndex >= 0 ? allTokens[tokenIndex] : nullptr;
+			if (tokenIndex == -1 || dynamic_cast<CodeParseTokenDelimiter*>(pToken))
+			{
+				// Delimiter found, iterate segment
+				bool bDependenciesSatisfied = true;
+				for (const std::string& requiredDependency : requiredDependencies)
+				{
+					if (satisfiedDependencies.find(requiredDependency) == satisfiedDependencies.end())
+					{
+						bDependenciesSatisfied = false;
+						break;
+					}
+				}
+				
+				if (bDependenciesSatisfied)
+				{
+					// Dependencies satisfied, add the segment to the sorted array
+					for (int segmentIndex = tokenIndex + 1; segmentIndex <= lastSegmentIndex; ++segmentIndex)
+					{
+						sortedTokens.push_back(allTokens[segmentIndex]);
+
+						std::string requiredDependency = allTokens[segmentIndex]->GetSatisfiedDependency();
+						if (requiredDependency != "")
+						{
+							// Mark satisfied dependencies as such
+							satisfiedDependencies.emplace();
+						}
+					}
+
+					// Remove the segment from the unsorted array
+					allTokens.erase(allTokens.begin() +  tokenIndex + 1, allTokens.begin() + lastSegmentIndex + 1);
+				}
+
+				lastSegmentIndex = tokenIndex;
+				--tokenIndex;
+				requiredDependencies.erase(requiredDependencies.begin(), requiredDependencies.end());
+			}
+			else
+			{
+				// No delimiter, continue along section
+				std::string requiredDependency = pToken->GetRequiredDependency();
+				if (requiredDependency != "")
+				{
+					requiredDependencies.emplace();
+				}
+				--tokenIndex;
+			}
+		}
+
+		if (allTokens.size() == numTokensBeforeLoop)
+		{
+			DOMLOG_ERROR("Infinite Loop! Circular Dependencies?")
+			return;
+		}
+	}
+
+	allTokens = sortedTokens;
 }
 
 std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& parseString) const
@@ -372,3 +460,5 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	file << "	};\n"
 			"}\n";
 }
+
+#pragma optimize("", on)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <vector>
 
 /** CodeParseTokenBase
 *
@@ -17,4 +18,9 @@ public:
 
 	// Override to write this token to a file.
 	virtual void WriteToFile(std::ofstream& outputFile) = 0;
+
+	// Optional functions that return which dependency is satisfied/required when this token is written to the file.
+	// Used to ensure base classes are written before child classes etc.
+	virtual std::string GetSatisfiedDependency() const { return ""; }
+	virtual std::string GetRequiredDependency() const { return ""; }
 };

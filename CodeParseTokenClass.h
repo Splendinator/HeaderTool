@@ -15,6 +15,8 @@ public:
 	
 	//~ Begin CodeParseTokenBase Interface
 	virtual void WriteToFile(std::ofstream& outputFile) override;
+	virtual std::string GetSatisfiedDependency() const { return className; }
+	virtual std::string GetRequiredDependency() const { return baseClass; }
 	//~ End CodeParseTokenBase Interface
 	
 	std::string className;
