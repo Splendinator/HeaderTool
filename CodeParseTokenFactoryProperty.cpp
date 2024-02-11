@@ -2,6 +2,7 @@
 
 #include "CodeParseTokenPropertyTypeClass.h"
 #include "CodeParseTokenPropertyTypeFloat.h"
+#include "CodeParseTokenPropertyTypeStruct.h"
 #include "ImGuiEditorMacros.h"
 
 class CodeParseTokenPropertyTypeBase;
@@ -17,11 +18,13 @@ CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string
 	// Setup property types
 	CodeParseTokenPropertyTypeFloat propertyTypeFloat;
 	CodeParseTokenPropertyTypeClass propertyTypeClass;
+	CodeParseTokenPropertyTypeStruct propertyTypeStruct;
 	
 	CodeParseTokenPropertyTypeBase* pPropertyTypes[] = 
 	{ 
 		&propertyTypeFloat,
 		&propertyTypeClass,
+		&propertyTypeStruct
 	};
 
 	// Try all property types

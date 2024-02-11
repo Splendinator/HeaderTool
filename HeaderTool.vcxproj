@@ -141,13 +141,18 @@
     <ClCompile Include="CodeParseTokenFactoryClass.cpp" />
     <ClCompile Include="CodeParseTokenFactoryProperty.cpp" />
     <ClCompile Include="CodeParseTokenFactoryScope.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryStruct.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryUDT.cpp" />
     <ClCompile Include="CodeParseTokenPropertyBase.cpp" />
     <ClCompile Include="CodeParseTokenPropertyClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyStruct.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeBase.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeStruct.cpp" />
     <ClCompile Include="CodeParseTokenScope.cpp" />
+    <ClCompile Include="CodeParseTokenStruct.cpp" />
     <ClCompile Include="HeaderTool.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -159,13 +164,18 @@
     <ClInclude Include="CodeParseTokenFactoryClass.h" />
     <ClInclude Include="CodeParseTokenFactoryProperty.h" />
     <ClInclude Include="CodeParseTokenFactoryScope.h" />
+    <ClInclude Include="CodeParseTokenFactoryStruct.h" />
+    <ClInclude Include="CodeParseTokenFactoryUDT.h" />
     <ClInclude Include="CodeParseTokenPropertyBase.h" />
     <ClInclude Include="CodeParseTokenPropertyClass.h" />
     <ClInclude Include="CodeParseTokenPropertyFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyStruct.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeBase.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeClass.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeStruct.h" />
     <ClInclude Include="CodeParseTokenScope.h" />
+    <ClInclude Include="CodeParseTokenStruct.h" />
     <ClInclude Include="HeaderTool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

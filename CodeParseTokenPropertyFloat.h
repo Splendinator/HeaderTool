@@ -17,7 +17,7 @@ public:
 	//~ End CodeParseTokenBase Interface
 
 	//~ Begin CodeParseTokenPropertyFloat Interface
-	virtual std::string GeneratedCodePropertySetString(const std::string& propertyTypeCode) const override { return "static_cast<EditorTypePropertyFloat*>(" + propertyTypeCode + ")->GetValue();\n"; }
+	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const override;
 	//~ End CodeParseTokenPropertyFloat Interface
 
 private:

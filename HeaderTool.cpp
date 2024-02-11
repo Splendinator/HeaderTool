@@ -15,7 +15,9 @@
 #include <fstream>
 #include <sstream>
 
+#include "CodeParseTokenFactoryStruct.h"
 #include "CodeParseTokenPropertyBase.h"
+#include "CodeParseTokenStruct.h"
 
 void HeaderTool::Run()
 {
@@ -78,16 +80,21 @@ void HeaderTool::Parse(std::string codeFile)
 	
 	// Set up token factories
 	CodeParseTokenFactoryClass codeParseTokenFactoryClass;
+	CodeParseTokenFactoryStruct codeParseTokenFactoryStruct;
 	CodeParseTokenFactoryProperty codeParseTokenFactoryProperty;
 	CodeParseTokenFactoryScope codeParseTokenFactoryScope;
 
+	// Preceeding tokens (Only allow properties inside classes etc.)
 	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryClass);
+	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryStruct);
 	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryScope);
 	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryClass);
+	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryStruct);
 
 	CodeParseTokenFactoryBase* pFactories[] =
 	{
 		&codeParseTokenFactoryClass,
+		&codeParseTokenFactoryStruct,
 		&codeParseTokenFactoryProperty,
 		&codeParseTokenFactoryScope
 	};
@@ -176,9 +183,11 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 	// #TODO: If we ever add "(" or ")" we need to make sure they don't collide with EDITORCLASS() etc.
 	static const std::string relevantStringsToExtract[] =
 	{
+		"//",
 		"{",
 		"}",
 		ImGuiEditorMacros::editorClassString,
+		ImGuiEditorMacros::editorStructString,
 		ImGuiEditorMacros::editorPropertyString,
 		ImGuiEditorMacros::editorIgnoreFileString,
 	};
@@ -209,6 +218,13 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 	size_t lastPos = 0;
 	for (const FoundRelevantString& foundRelevantString : foundRelevantStrings)
 	{
+		if (foundRelevantString.relevantString == "//")
+		{
+			// If we find an inline comment then ignore any preceding strings.
+			// #TODO: This won't work with multiline comments
+			return subStrings;
+		}
+		
 		std::string prevString = parseString.substr(lastPos, foundRelevantString.index - lastPos);
 		if (prevString != "")
 		{
@@ -255,10 +271,11 @@ void HeaderTool::WriteGlobalHeaderFile(std::ofstream& file)
 {
 	file << "#pragma once\n"
 		 <<	ImGuiEditorMacros::editorIgnoreFileString << // Flag generated files as "do not parse"
-			"\nclass EditorAssetBase;\n"
+			"\nclass EditorTypePropertyBase;\n"
 			"namespace __Generated\n"
 			"{\n"
-			"	extern std::unordered_map<std::string, void* (*)(EditorAssetBase*)> stringToCreateClassFunction;\n"
+			"	// This works for both structs and classes.\n"
+			"	extern std::unordered_map<std::string, void* (*)(const std::vector<EditorTypePropertyBase*>&)> stringToCreateObjectFunction;\n"
 			"}\n";
 }
 
@@ -267,12 +284,12 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	// Includes
 	file << "#include \"pch.h\"\n"
 			"#include \"" << ImGuiEditorGlobals::generatedFileNames << ".h\"\n"
-			"#include \"EditorAssetClass.h\"\n"
 			"#include \"EditorTypePropertyClass.h\"\n"
-			"#include \"EditorTypePropertyFloat.h\"\n";
+			"#include \"EditorTypePropertyFloat.h\"\n"
+			"#include \"EditorTypePropertyStruct.h\"\n";
 	
 	
-	// Include all relevant code files (since they will be used in InitFromAsset functions
+	// Include all relevant code files (since they will be used in InitFromProperties functions
 	// #TODO: These will be full filepaths like "C:/Users/Dominic/Desktop/...". They will need to be relative if we plan on using the editor .exe from another PC without compiling (unlikely)
 	for (std::string relevantCodeFile : allRelevantCodeFiles)
 	{
@@ -280,16 +297,25 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	}
 	file << "\n";
 	
-	// Add all class InitFromAsset() functions
+	// Add all class and struct InitFromProperties() functions
 	for (int index = 0; index < allTokens.size(); ++index)
 	{
+		// #JANK: This can be done with inheritence instead of casting to 2 classes
+		std::string name = "";
 		if (CodeParseTokenClass* pClassToken = dynamic_cast<CodeParseTokenClass*>(allTokens[index]))
 		{
-			file << "void* " << pClassToken->className << "::InitFromAsset(EditorAssetBase* pAsset)\n"
+			name = pClassToken->className;
+		}
+		else if (CodeParseTokenStruct* pStructToken = dynamic_cast<CodeParseTokenStruct*>(allTokens[index]))
+		{
+			name = pStructToken->structName;
+		}
+		
+		if (name != "")
+		{
+			file << "void* " << name << "::InitFromProperties(const std::vector<EditorTypePropertyBase*>& properties)\n"
 					"{\n"
-				 << pClassToken->className << "* pReturn = new " << pClassToken->className << ";\n"
-					"EditorAssetClass* pEditorAssetClass = static_cast<EditorAssetClass*>(pAsset);\n"
-					"const std::vector<EditorTypePropertyBase*>& properties = pEditorAssetClass->GetProperties();\n";
+				 << name << "* pReturn = new " << name << ";\n";
 
 			int propertyIndex = 0;
 			while (true)
@@ -302,8 +328,9 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 				}
 				else if (CodeParseTokenPropertyBase* pPropertyToken = dynamic_cast<CodeParseTokenPropertyBase*>(pToken))
 				{
-					std::string propertyTypeCode = "properties[" + std::to_string(propertyIndex++) + "]"; 
-					file << "pReturn->" << pPropertyToken->propertyName << " = " << pPropertyToken->GeneratedCodePropertySetString(propertyTypeCode);
+					std::string propertyTypeCode = "properties[" + std::to_string(propertyIndex++) + "]";
+					std::string lValueCode = "pReturn->" + pPropertyToken->propertyName;
+					file << pPropertyToken->GenerateSetPropertyCode(lValueCode, propertyTypeCode);
 				}
 				else
 				{
@@ -319,16 +346,26 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 
 	file << "namespace __Generated\n"
 			"{\n"
-			"	std::unordered_map<std::string, void* (*)(EditorAssetBase*)> stringToCreateClassFunction\n"
+			"	std::unordered_map<std::string, void* (*)(const std::vector<EditorTypePropertyBase*>&)> stringToCreateObjectFunction\n"
 			"	{\n";
 
 	// Add all gathered classes to the map of class names to functions
 	for (CodeParseTokenBase* token : allTokens)
 	{
+		std::string name = "";
 		if (CodeParseTokenClass* pClassToken = dynamic_cast<CodeParseTokenClass*>(token))
 		{
-			// {"MyClass", &MyClass::InitFromAsset},
-			file << "		{\"" << pClassToken->className << "\", &" << pClassToken->className << "::InitFromAsset},\n";
+			name = pClassToken->className;
+		}
+		else if (CodeParseTokenStruct* pStructToken = dynamic_cast<CodeParseTokenStruct*>(token))
+		{
+			name = pStructToken->structName;
+		}
+		
+		if (name != "")
+		{
+			// {"MyClass", &MyClass::InitFromProperties},
+			file << "		{\"" << name << "\", &" << name << "::InitFromProperties},\n";
 		}
 	}
 

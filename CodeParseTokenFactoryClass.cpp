@@ -8,28 +8,12 @@ bool CodeParseTokenFactoryClass::IsKeyword(const std::string& keyword)
 	return keyword == ImGuiEditorMacros::editorClassString;
 }
 
-CodeParseTokenBase* CodeParseTokenFactoryClass::CreateToken(const std::string& keyword, std::stringstream& stream)
+std::string CodeParseTokenFactoryClass::GetUDTKeyword()
 {
-	std::string nextString;
-	
-	stream >> nextString;
-	if (nextString != "class")
-	{
-		return nullptr;
-	}
-
-	std::string className;
-	stream >> className;
-
-	stream >> nextString; 
-	DOMLOG_ERROR_IF(nextString != "{", "Expected { after class name");
-
-	return new CodeParseTokenClass(className);
-
-	// #TODO: Handle base class if one exists
+	return "class";
 }
 
-std::string CodeParseTokenFactoryClass::GetEndString() const
+CodeParseTokenBase* CodeParseTokenFactoryClass::CreateUDTToken(const std::string& udtName)
 {
-	return "}";
+	return new CodeParseTokenClass(udtName);
 }

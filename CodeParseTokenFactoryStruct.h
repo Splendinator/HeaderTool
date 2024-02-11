@@ -1,12 +1,12 @@
-#pragma once
+﻿#pragma once
 
 #include "CodeParseTokenFactoryUDT.h"
 
-/** CodeParseTokenFactoryClass
+/** CodeParseTokenFactoryStruct
 *
-* This class is used to create CodeParseTokenClass objects
+* This struct is used to create CodeParseTokenStruct objects
 */
-class CodeParseTokenFactoryClass : public CodeParseTokenFactoryUDT
+struct CodeParseTokenFactoryStruct : public CodeParseTokenFactoryUDT
 {
 public:
 	

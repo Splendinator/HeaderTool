@@ -24,10 +24,20 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeFloat::CreateParseTokenType(const 
 	stream >> propertyName; // "myFloat"
 	
 	
-	std::string defaultValue = GetDefaultValueString(property);
-	if (defaultValue == "")
+	std::string defaultValue = "0.0f";
+	if (propertyName[propertyName.size() - 1] == ';')
 	{
-		defaultValue = "0.0f";
+		// No default value i.e. "float myFloat;"
+		propertyName = propertyName.substr(0, propertyName.size() - 1); // cut off semicolon
+	}
+	else
+	{
+		// Default value i.e. "float myFloat = 2.0f;"
+		defaultValue = GetDefaultValueString(property);
+		if (defaultValue == "")
+		{
+			defaultValue = "0.0f";
+		}
 	}
 		
 	DOMLOG_ERROR_IF(defaultValue.substr(defaultValue.size() - 1, 1) != "f", "default float value not in correct format, must end in f");
