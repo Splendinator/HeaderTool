@@ -22,5 +22,5 @@ public:
 	// Optional functions that return which dependency is satisfied/required when this token is written to the file.
 	// Used to ensure base classes are written before child classes etc.
 	virtual std::string GetSatisfiedDependency() const { return ""; }
-	virtual std::string GetRequiredDependency() const { return ""; }
+	virtual std::vector<std::string> GetRequiredDependencies() const { return {}; }
 };

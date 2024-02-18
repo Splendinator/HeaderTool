@@ -18,19 +18,19 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeClass::CreateParseTokenType(const 
 {
 	std::stringstream stream(property);
 	std::string className;
-	std::string propertyName;
+	std::string classPropertyName;
 	stream >> className;
-	stream >> propertyName;
+	stream >> classPropertyName;
 	
 	if (className[className.length()-1] == '*')
 	{
 		className = className.substr(0, className.length()-1);
 	}
 	
-	if (propertyName[propertyName.length()-1] == ';')
+	if (classPropertyName[classPropertyName.length()-1] == ';')
 	{
-		propertyName = propertyName.substr(0, propertyName.length()-1);
+		classPropertyName = classPropertyName.substr(0, classPropertyName.length()-1);
 	}
 	
-	return new CodeParseTokenPropertyClass(propertyName, className);
+	return new CodeParseTokenPropertyClass(classPropertyName, className);
 }

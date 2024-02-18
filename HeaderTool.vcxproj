@@ -115,7 +115,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -124,6 +124,8 @@
       <AdditionalIncludeDirectories>../Roguelike;C:\Users\Dominic\Desktop\Big Folder of Userfulness\C++\My Headers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4100;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,8 +153,11 @@
     <ClCompile Include="CodeParseTokenPropertyTypeClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeFloat.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeStruct.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeVector.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyVector.cpp" />
     <ClCompile Include="CodeParseTokenScope.cpp" />
     <ClCompile Include="CodeParseTokenStruct.cpp" />
+    <ClCompile Include="CodeParseTokenUDT.cpp" />
     <ClCompile Include="HeaderTool.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -174,8 +179,11 @@
     <ClInclude Include="CodeParseTokenPropertyTypeClass.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeFloat.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeStruct.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeVector.h" />
+    <ClInclude Include="CodeParseTokenPropertyVector.h" />
     <ClInclude Include="CodeParseTokenScope.h" />
     <ClInclude Include="CodeParseTokenStruct.h" />
+    <ClInclude Include="CodeParseTokenUDT.h" />
     <ClInclude Include="HeaderTool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

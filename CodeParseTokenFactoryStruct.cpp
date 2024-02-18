@@ -13,7 +13,7 @@ std::string CodeParseTokenFactoryStruct::GetUDTKeyword()
 	return "struct";
 }
 
-CodeParseTokenBase* CodeParseTokenFactoryStruct::CreateUDTToken(const std::string& udtName)
+CodeParseTokenBase* CodeParseTokenFactoryStruct::CreateUDTToken(const std::string& udtName, const std::vector<std::string>& baseUdts)
 {
-	return new CodeParseTokenStruct(udtName);
+	return new CodeParseTokenStruct(udtName, baseUdts);
 }

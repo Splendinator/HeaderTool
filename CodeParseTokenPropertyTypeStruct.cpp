@@ -26,14 +26,14 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeStruct::CreateParseTokenType(const
 {
 	std::stringstream stream(property);
 	std::string structName;
-	std::string propertyName;
+	std::string structPropertyName;
 	stream >> structName;
-	stream >> propertyName;
+	stream >> structPropertyName;
 	
-	if (propertyName[propertyName.length()-1] == ';')
+	if (structPropertyName[structPropertyName.length()-1] == ';')
 	{
-		propertyName = propertyName.substr(0, propertyName.length()-1);
+		structPropertyName = structPropertyName.substr(0, structPropertyName.length()-1);
 	}
 	
-	return new CodeParseTokenPropertyStruct(propertyName, structName);
+	return new CodeParseTokenPropertyStruct(structPropertyName, structName);
 }

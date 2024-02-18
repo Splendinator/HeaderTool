@@ -15,7 +15,10 @@ C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeBase.cpp;
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeClass.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeClass.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeFloat.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeFloat.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeStruct.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeStruct.obj
+C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeVector.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeVector.obj
+C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyVector.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyVector.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenScope.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenScope.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenStruct.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenStruct.obj
+C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenUDT.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenUDT.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\HeaderTool.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\HeaderTool.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\Main.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\Main.obj

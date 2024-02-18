@@ -19,7 +19,7 @@ public:
 
 	//~ Begin CodeParseTokenPropertyBase Interface
 	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const override;
-	virtual std::string GetRequiredDependency() const { return structName; }
+	virtual std::vector<std::string> GetRequiredDependencies() const override { return {structName}; }
 	//~ End CodeParseTokenPropertyBase Interface
 
 	std::string structName; // name of the Struct type this pointer points to, i.e "Vec3f", not "position" 

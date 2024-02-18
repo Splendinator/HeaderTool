@@ -16,5 +16,5 @@ public:
 	//~ End CodeParseTokenFactoryBase Interface
 	
 	virtual std::string GetUDTKeyword() = 0;
-	virtual CodeParseTokenBase* CreateUDTToken(const std::string& udtName) = 0;
+	virtual CodeParseTokenBase* CreateUDTToken(const std::string& udtName, const std::vector<std::string>& baseUdts) = 0;
 };

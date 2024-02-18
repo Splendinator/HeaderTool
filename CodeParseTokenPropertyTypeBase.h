@@ -22,7 +22,5 @@ public:
 protected:
 	
 
-	std::string GetDefaultValueString(const std::string& property) const;
-
-	std::string propertyName;
+	std::string GetDefaultValueString(const std::string& property) const; // Get the default value of the property (part after the '=') or "" if there isn't one 
 };

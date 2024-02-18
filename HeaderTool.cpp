@@ -20,8 +20,6 @@
 #include "CodeParseTokenPropertyBase.h"
 #include "CodeParseTokenStruct.h"
 
-#include "../../../../../VulkanSDK/1.2.198.1/Include/vulkan/vulkan_core.h"
-
 #include "DomWindow/DomWindow.h"
 
 // #TEMP: Optimisation
@@ -195,13 +193,19 @@ void HeaderTool::SortCodeParseTokens()
 
 	std::set<std::string> satisfiedDependencies; // Ever growing vector of satisfied dependencies
 
+	// Start off with default types as a given
+	satisfiedDependencies.emplace("float");
+	satisfiedDependencies.emplace("int");
+	satisfiedDependencies.emplace("double");
+	satisfiedDependencies.emplace("char");
+
 	// While tokens remain...
 	while (!allTokens.empty())
 	{
-		int numTokensBeforeLoop = allTokens.size();
+		int numTokensBeforeLoop = (int)allTokens.size();
 		int tokenIndex = numTokensBeforeLoop - 2; // Last token will be delimiter, so skip it
 		int lastSegmentIndex = numTokensBeforeLoop - 1; 
-		std::set<std::string> requiredDependencies;
+		std::set<std::string> allRequiredDependencies;
 
 		while (tokenIndex >= -1) // use "-1" so we can tell if we've reached the end (vs hitting a delimiter)
 		{
@@ -212,7 +216,7 @@ void HeaderTool::SortCodeParseTokens()
 			{
 				// Delimiter found, iterate segment
 				bool bDependenciesSatisfied = true;
-				for (const std::string& requiredDependency : requiredDependencies)
+				for (const std::string& requiredDependency : allRequiredDependencies)
 				{
 					if (satisfiedDependencies.find(requiredDependency) == satisfiedDependencies.end())
 					{
@@ -232,7 +236,7 @@ void HeaderTool::SortCodeParseTokens()
 						if (requiredDependency != "")
 						{
 							// Mark satisfied dependencies as such
-							satisfiedDependencies.emplace();
+							satisfiedDependencies.emplace(requiredDependency);
 						}
 					}
 
@@ -242,15 +246,15 @@ void HeaderTool::SortCodeParseTokens()
 
 				lastSegmentIndex = tokenIndex;
 				--tokenIndex;
-				requiredDependencies.erase(requiredDependencies.begin(), requiredDependencies.end());
+				allRequiredDependencies.erase(allRequiredDependencies.begin(), allRequiredDependencies.end());
 			}
 			else
 			{
 				// No delimiter, continue along section
-				std::string requiredDependency = pToken->GetRequiredDependency();
-				if (requiredDependency != "")
+				std::vector<std::string> requiredDependencies = pToken->GetRequiredDependencies();
+				for(const std::string& requiredDependency : requiredDependencies)
 				{
-					requiredDependencies.emplace();
+					allRequiredDependencies.emplace(requiredDependency);
 				}
 				--tokenIndex;
 			}
@@ -274,6 +278,7 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 		"//",
 		"{",
 		"}",
+		",",
 		ImGuiEditorMacros::editorClassString,
 		ImGuiEditorMacros::editorStructString,
 		ImGuiEditorMacros::editorPropertyString,
@@ -374,7 +379,8 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			"#include \"" << ImGuiEditorGlobals::generatedFileNames << ".h\"\n"
 			"#include \"EditorTypePropertyClass.h\"\n"
 			"#include \"EditorTypePropertyFloat.h\"\n"
-			"#include \"EditorTypePropertyStruct.h\"\n";
+			"#include \"EditorTypePropertyStruct.h\"\n"
+			"#include \"EditorTypePropertyVector.h\"\n";
 	
 	
 	// Include all relevant code files (since they will be used in InitFromProperties functions
@@ -385,49 +391,57 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	}
 	file << "\n";
 	
-	// Add all class and struct InitFromProperties() functions
+	// Add all class and struct InitFromProperties() and InitFromPropertiesSubset() functions
 	for (int index = 0; index < allTokens.size(); ++index)
 	{
-		// #JANK: This can be done with inheritence instead of casting to 2 classes
-		std::string name = "";
-		if (CodeParseTokenClass* pClassToken = dynamic_cast<CodeParseTokenClass*>(allTokens[index]))
+		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(allTokens[index]))
 		{
-			name = pClassToken->className;
-		}
-		else if (CodeParseTokenStruct* pStructToken = dynamic_cast<CodeParseTokenStruct*>(allTokens[index]))
-		{
-			name = pStructToken->structName;
-		}
-		
-		if (name != "")
-		{
-			file << "void* " << name << "::InitFromProperties(const std::vector<EditorTypePropertyBase*>& properties)\n"
-					"{\n"
-				 << name << "* pReturn = new " << name << ";\n";
+			std::string name = pUDTToken->udtName;
 
-			int propertyIndex = 0;
-			while (true)
+			// InitFromPropertiesSubset()
 			{
-				CodeParseTokenBase* pToken = allTokens[++index];
+				file <<	"// " << name << "\n"
+						"void " << name << "::InitFromPropertiesSubset(void* pObject, const std::vector<EditorTypePropertyBase*>& properties, int& propertyIndex)\n"
+						"{\n" 
+						"\t" << name << "* p" << name << " = static_cast<" << name << "*>(pObject);\n";
+			
+				// Call base class init functions
+				for (std::string baseName : pUDTToken->baseUdtNames)
+				{
+					file << "\t" << baseName << "::InitFromPropertiesSubset(static_cast<" << baseName << "*>(p" << name << "), properties, propertyIndex);\n"; 
+				}
 
-				if (dynamic_cast<CodeParseTokenScope*>(pToken))
+				// Set properties of this class
+				while (true)
 				{
-					// Ignore scope tokens, they are allowed to be interspersed within a class.
-				}
-				else if (CodeParseTokenPropertyBase* pPropertyToken = dynamic_cast<CodeParseTokenPropertyBase*>(pToken))
-				{
-					std::string propertyTypeCode = "properties[" + std::to_string(propertyIndex++) + "]";
-					std::string lValueCode = "pReturn->" + pPropertyToken->propertyName;
-					file << pPropertyToken->GenerateSetPropertyCode(lValueCode, propertyTypeCode);
-				}
-				else
-				{
-					// If we end up here there's an unexpected token, so we assume the class has ended
-					break;
+					CodeParseTokenBase* pToken = allTokens[++index];
+
+					if (dynamic_cast<CodeParseTokenScope*>(pToken))
+					{
+						// Ignore scope tokens, they are allowed to be interspersed within a class.
+					}
+					else if (CodeParseTokenPropertyBase* pPropertyToken = dynamic_cast<CodeParseTokenPropertyBase*>(pToken))
+					{
+						std::string propertyTypeCode = "properties[propertyIndex++]";
+						std::string lValueCode = "p" + name + "->" + pPropertyToken->propertyName;
+						file << "\t" << pPropertyToken->GenerateSetPropertyCode(lValueCode, propertyTypeCode);
+					}
+					else
+					{
+						// If we end up here there's an unexpected token, so we assume the class has ended
+						break;
+					}
 				}
 			}
 
-			file << "return pReturn;\n"
+			// InitFromProperties()
+			file << "}\n\n"
+					"void* " << name << "::InitFromProperties(const std::vector<EditorTypePropertyBase*>& properties)\n"
+					"{\n" 
+					"\t" << name << "* p" << name << " = new " << name << ";\n"
+					"\t" << "int propertyIndex = 0;\n"
+					"\t" << name << "::InitFromPropertiesSubset(p" << name << ", properties, propertyIndex);\n"
+					"\treturn p" << name << ";\n"
 					"}\n\n";
 		}
 	}
@@ -440,18 +454,10 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	// Add all gathered classes to the map of class names to functions
 	for (CodeParseTokenBase* token : allTokens)
 	{
-		std::string name = "";
-		if (CodeParseTokenClass* pClassToken = dynamic_cast<CodeParseTokenClass*>(token))
+		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(token))
 		{
-			name = pClassToken->className;
-		}
-		else if (CodeParseTokenStruct* pStructToken = dynamic_cast<CodeParseTokenStruct*>(token))
-		{
-			name = pStructToken->structName;
-		}
-		
-		if (name != "")
-		{
+			std::string name = pUDTToken->udtName;
+			
 			// {"MyClass", &MyClass::InitFromProperties},
 			file << "		{\"" << name << "\", &" << name << "::InitFromProperties},\n";
 		}

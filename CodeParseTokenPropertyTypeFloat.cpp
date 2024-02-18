@@ -19,7 +19,9 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeFloat::CreateParseTokenType(const 
 {
 	std::stringstream stream(property);
 
-	std::string unused; 
+	std::string unused;
+	std::string propertyName;
+	
 	stream >> unused; // "float"
 	stream >> propertyName; // "myFloat"
 	

@@ -1,24 +1,19 @@
 ﻿#pragma once
 
-#include "CodeParseTokenBase.h"
+#include "CodeParseTokenUDT.h"
 
 /** CodeParseTokenStruct
 *
 * Token for a Struct
 */
-class CodeParseTokenStruct : public CodeParseTokenBase
+class CodeParseTokenStruct : public CodeParseTokenUDT
 {
 public:
 
-	CodeParseTokenStruct(std::string inStructName) : CodeParseTokenBase(), structName(inStructName) {}
-	CodeParseTokenStruct(std::string inStructName, std::string inBaseStruct) : CodeParseTokenBase(), structName(inStructName), baseStruct(inBaseStruct) {}
+	CodeParseTokenStruct(std::string inName, std::vector<std::string> baseNames = {}) : CodeParseTokenUDT(inName, baseNames) {}
 	
-	//~ Begin CodeParseTokenBase Interface
-	virtual void WriteToFile(std::ofstream& outputFile) override;
-	virtual std::string GetSatisfiedDependency() const { return structName; }
-	virtual std::string GetRequiredDependency() const { return baseStruct; }
-	//~ End CodeParseTokenBase Interface
+	//~ Begin CodeParseTokenUDT Interface
+	virtual std::string GetUDTTypeName() override {return "Struct";}
+	//~ End CodeParseTokenUDT Interface
 	
-	std::string structName;
-	std::string baseStruct;
 };
