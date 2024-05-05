@@ -2,18 +2,18 @@
 
 #include "CodeParseTokenPropertyTypeBase.h"
 
-/** CodeParseTokenPropertyTypeFloat
+/** CodeParseTokenPropertyTypeString
  *
- * Handles creating float property tokens
+ * Handles creating string property tokens
  */
-class CodeParseTokenPropertyTypeFloat : public CodeParseTokenPropertyTypeBase
+class CodeParseTokenPropertyTypeString : public CodeParseTokenPropertyTypeBase
 {
 public:
 	//~ Begin CodeParseTokenPropertyTypeBase Interface
 	bool IsPropertyType(const std::string& property) const override;
 	//~ End CodeParseTokenPropertyTypeBase Interface
 
-protected:
+	protected:
 	//~ Begin CodeParseTokenPropertyTypeBase Interface
 	CodeParseTokenBase* CreateParseTokenType(const std::string& property) override;
 	//~ End CodeParseTokenPropertyTypeBase Interface

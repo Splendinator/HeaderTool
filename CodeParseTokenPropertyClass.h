@@ -17,7 +17,7 @@ public:
 	//~ End CodeParseTokenBase Interface
 
 	//~ Begin CodeParseTokenPropertyBase Interface
-	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const override;
+	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const override;
 	//~ End CodeParseTokenPropertyBase Interface
 
 	std::string className; // name of the class type this pointer points to, i.e "Vec3f", not "position" 

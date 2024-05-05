@@ -18,7 +18,7 @@ public:
 	//~ End CodeParseTokenBase Interface
 
 	//~ Begin CodeParseTokenPropertyBase Interface
-	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const override;
+	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const override;
 	virtual std::vector<std::string> GetRequiredDependencies() const override { return {structName}; }
 	//~ End CodeParseTokenPropertyBase Interface
 

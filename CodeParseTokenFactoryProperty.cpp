@@ -1,7 +1,10 @@
 #include "CodeParseTokenFactoryProperty.h"
 
+#include "CodeParseTokenPropertyTypeBool.h"
 #include "CodeParseTokenPropertyTypeClass.h"
 #include "CodeParseTokenPropertyTypeFloat.h"
+#include "CodeParseTokenPropertyTypeInt.h"
+#include "CodeParseTokenPropertyTypeString.h"
 #include "CodeParseTokenPropertyTypeStruct.h"
 #include "CodeParseTokenPropertyTypeVector.h"
 #include "ImGuiEditorMacros.h"
@@ -16,18 +19,24 @@ bool CodeParseTokenFactoryProperty::IsKeyword(const std::string& keyword)
 
 CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string& keyword, std::stringstream& stream)
 {
-	// Setup property types
+	// Setup property types -- Order matters here
 	CodeParseTokenPropertyTypeFloat propertyTypeFloat;
+	CodeParseTokenPropertyTypeInt propertyTypeInt;
+	CodeParseTokenPropertyTypeString propertyTypeString;
+	CodeParseTokenPropertyTypeBool propertyTypeBool;
+	CodeParseTokenPropertyTypeVector propertyTypeVector;
 	CodeParseTokenPropertyTypeClass propertyTypeClass;
 	CodeParseTokenPropertyTypeStruct propertyTypeStruct;
-	CodeParseTokenPropertyTypeVector propertyTypeVector;
 	
 	CodeParseTokenPropertyTypeBase* pPropertyTypes[] = 
 	{ 
 		&propertyTypeFloat,
+		&propertyTypeInt,
+		&propertyTypeString,
+		&propertyTypeBool,
+		&propertyTypeVector,
 		&propertyTypeClass,
 		&propertyTypeStruct,
-		&propertyTypeVector,
 	};
 
 	// Try all property types

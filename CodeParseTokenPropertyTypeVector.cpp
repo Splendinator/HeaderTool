@@ -1,6 +1,7 @@
 ﻿#include "CodeParseTokenPropertyTypeVector.h"
 
 #include "CodeParseTokenPropertyVector.h"
+#include "HeaderToolUtils.h"
 
 #include "DomLog/DomLog.h"
 
@@ -21,5 +22,17 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeVector::CreateParseTokenType(const
 	std::string dataType = property.substr(templateBeginPos + 1, templateEndPos - templateBeginPos - 1);
 	std::string propertyName = property.substr(templateEndPos + 2, semiColonPos - templateEndPos - 2);
 
+	size_t pointerIndex = dataType.find('*');
+	if (pointerIndex != std::string::npos)
+	{
+		dataType = dataType.substr(0, pointerIndex);
+	}
+
+	size_t stdIndex = dataType.find("std::");
+	if (stdIndex != std::string::npos)
+	{
+		dataType = dataType.substr(stdIndex + std::size("std::") - 1);
+	}
+	
 	return new CodeParseTokenPropertyVector(propertyName, dataType);
 }

@@ -5,6 +5,8 @@
 
 #include <sstream>
 
+#include "HeaderToolUtils.h"
+
 bool CodeParseTokenPropertyTypeFloat::IsPropertyType(const std::string& property) const
 {
 	std::stringstream stream(property);
@@ -12,7 +14,14 @@ bool CodeParseTokenPropertyTypeFloat::IsPropertyType(const std::string& property
 	std::string dataType; 
 	stream >> dataType;
 
-	return dataType == "float";
+	for (std::string& floatType : HeaderToolUtils::floatTypes)
+	{
+		if (floatType == dataType)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 CodeParseTokenBase* CodeParseTokenPropertyTypeFloat::CreateParseTokenType(const std::string& property)

@@ -12,6 +12,8 @@ class HeaderTool
 public:
 	void Run();
 
+	const std::vector<CodeParseTokenBase*>& GetAllTokens() const { return allTokens; } // Can be empty if called too early
+	
 private:
 	
 	// Parse all code files in the input directory and collate their types into a master file

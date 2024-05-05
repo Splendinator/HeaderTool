@@ -7,7 +7,7 @@ void CodeParseTokenPropertyFloat::WriteToFile(std::ofstream& outputFile)
 	PropertyFileUtils::WriteFloatToFile(outputFile, propertyName, defaultValue);
 }
 
-std::string CodeParseTokenPropertyFloat::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const
+std::string CodeParseTokenPropertyFloat::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const
 {
 	return lValueString + " = static_cast<EditorTypePropertyFloat*>(" + propertyTypeCode + ")->GetValue();\n";
 }

@@ -1,16 +1,16 @@
-#pragma once
+﻿#pragma once
 
 #include "CodeParseTokenPropertyBase.h"
 
-/** CodeParseTokenPropertyFloat
+/** CodeParseTokenPropertyInt
 *
-* This class is used to parse float properties
+* This class is used for parsing int properties
 */
-class CodeParseTokenPropertyFloat : public CodeParseTokenPropertyBase
+class CodeParseTokenPropertyInt : public CodeParseTokenPropertyBase
 {
 public:
-
-	CodeParseTokenPropertyFloat(const std::string& inPropertyName, float inDefaultValue) : CodeParseTokenPropertyBase(inPropertyName), defaultValue(inDefaultValue) {}
+	
+	CodeParseTokenPropertyInt(const std::string& inPropertyName, int inDefaultValue) : CodeParseTokenPropertyBase(inPropertyName), defaultValue(inDefaultValue) {}
 
 	//~ Begin CodeParseTokenBase Interface
 	virtual void WriteToFile(std::ofstream& outputFile) override;
@@ -21,6 +21,5 @@ public:
 	//~ End CodeParseTokenPropertyBase Interface
 
 private:
-
-	float defaultValue;
+	int defaultValue;
 };

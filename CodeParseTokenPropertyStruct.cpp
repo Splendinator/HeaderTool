@@ -7,7 +7,7 @@ void CodeParseTokenPropertyStruct::WriteToFile(std::ofstream& outputFile)
 	PropertyFileUtils::WriteStructToFile(outputFile, propertyName, structName);
 }
 
-std::string CodeParseTokenPropertyStruct::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode) const
+std::string CodeParseTokenPropertyStruct::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const
 {
 	// #TODO: This could use InitFromPropertiesSubset() to set the struct up inline without new/delete
 	return

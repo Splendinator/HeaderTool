@@ -1,16 +1,16 @@
-#pragma once
+﻿#pragma once
 
 #include "CodeParseTokenPropertyBase.h"
 
-/** CodeParseTokenPropertyFloat
+/** CodeParseTokenPropertyBool
 *
-* This class is used to parse float properties
+* This class is used for bool properties
 */
-class CodeParseTokenPropertyFloat : public CodeParseTokenPropertyBase
+class CodeParseTokenPropertyBool : public CodeParseTokenPropertyBase
 {
 public:
-
-	CodeParseTokenPropertyFloat(const std::string& inPropertyName, float inDefaultValue) : CodeParseTokenPropertyBase(inPropertyName), defaultValue(inDefaultValue) {}
+	
+	CodeParseTokenPropertyBool(const std::string& inPropertyName, bool inDefaultValue) : CodeParseTokenPropertyBase(inPropertyName), defaultValue(inDefaultValue) {}
 
 	//~ Begin CodeParseTokenBase Interface
 	virtual void WriteToFile(std::ofstream& outputFile) override;
@@ -19,8 +19,7 @@ public:
 	//~ Begin CodeParseTokenPropertyBase Interface
 	virtual std::string GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const override;
 	//~ End CodeParseTokenPropertyBase Interface
-
+	
 private:
-
-	float defaultValue;
+	bool defaultValue = false;
 };

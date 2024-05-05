@@ -146,12 +146,18 @@
     <ClCompile Include="CodeParseTokenFactoryStruct.cpp" />
     <ClCompile Include="CodeParseTokenFactoryUDT.cpp" />
     <ClCompile Include="CodeParseTokenPropertyBase.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyBool.cpp" />
     <ClCompile Include="CodeParseTokenPropertyClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyInt.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyString.cpp" />
     <ClCompile Include="CodeParseTokenPropertyStruct.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeBase.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeBool.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeInt.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeString.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeStruct.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeVector.cpp" />
     <ClCompile Include="CodeParseTokenPropertyVector.cpp" />
@@ -159,6 +165,7 @@
     <ClCompile Include="CodeParseTokenStruct.cpp" />
     <ClCompile Include="CodeParseTokenUDT.cpp" />
     <ClCompile Include="HeaderTool.cpp" />
+    <ClCompile Include="HeaderToolUtils.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,12 +179,18 @@
     <ClInclude Include="CodeParseTokenFactoryStruct.h" />
     <ClInclude Include="CodeParseTokenFactoryUDT.h" />
     <ClInclude Include="CodeParseTokenPropertyBase.h" />
+    <ClInclude Include="CodeParseTokenPropertyBool.h" />
     <ClInclude Include="CodeParseTokenPropertyClass.h" />
     <ClInclude Include="CodeParseTokenPropertyFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyInt.h" />
+    <ClInclude Include="CodeParseTokenPropertyString.h" />
     <ClInclude Include="CodeParseTokenPropertyStruct.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeBase.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeBool.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeClass.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeInt.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeString.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeStruct.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeVector.h" />
     <ClInclude Include="CodeParseTokenPropertyVector.h" />
@@ -185,6 +198,7 @@
     <ClInclude Include="CodeParseTokenStruct.h" />
     <ClInclude Include="CodeParseTokenUDT.h" />
     <ClInclude Include="HeaderTool.h" />
+    <ClInclude Include="HeaderToolUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,8 +6,12 @@
 #include "CodeParseTokenFactoryClass.h"
 #include "CodeParseTokenFactoryProperty.h"
 #include "CodeParseTokenFactoryScope.h"
+#include "CodeParseTokenFactoryStruct.h"
+#include "CodeParseTokenPropertyBase.h"
 #include "CodeParseTokenScope.h"
+#include "CodeParseTokenStruct.h"
 #include "DomImport/DomImport.h"
+#include "HeaderToolUtils.h"
 #include "ImGuiEditorGlobals.h"
 #include "ImGuiEditorMacros.h"
 
@@ -15,12 +19,6 @@
 #include <fstream>
 #include <set>
 #include <sstream>
-
-#include "CodeParseTokenFactoryStruct.h"
-#include "CodeParseTokenPropertyBase.h"
-#include "CodeParseTokenStruct.h"
-
-#include "DomWindow/DomWindow.h"
 
 // #TEMP: Optimisation
 #pragma optimize("", off)
@@ -194,10 +192,10 @@ void HeaderTool::SortCodeParseTokens()
 	std::set<std::string> satisfiedDependencies; // Ever growing vector of satisfied dependencies
 
 	// Start off with default types as a given
-	satisfiedDependencies.emplace("float");
-	satisfiedDependencies.emplace("int");
-	satisfiedDependencies.emplace("double");
-	satisfiedDependencies.emplace("char");
+	for (std::string& basicType : HeaderToolUtils::GetBasicTypes())
+	{
+		satisfiedDependencies.emplace(basicType);
+	}
 
 	// While tokens remain...
 	while (!allTokens.empty())
@@ -379,6 +377,9 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			"#include \"" << ImGuiEditorGlobals::generatedFileNames << ".h\"\n"
 			"#include \"EditorTypePropertyClass.h\"\n"
 			"#include \"EditorTypePropertyFloat.h\"\n"
+			"#include \"EditorTypePropertyInt.h\"\n"
+			"#include \"EditorTypePropertyBool.h\"\n"
+			"#include \"EditorTypePropertyString.h\"\n"
 			"#include \"EditorTypePropertyStruct.h\"\n"
 			"#include \"EditorTypePropertyVector.h\"\n";
 	
@@ -424,7 +425,7 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 					{
 						std::string propertyTypeCode = "properties[propertyIndex++]";
 						std::string lValueCode = "p" + name + "->" + pPropertyToken->propertyName;
-						file << "\t" << pPropertyToken->GenerateSetPropertyCode(lValueCode, propertyTypeCode);
+						file << "\t" << pPropertyToken->GenerateSetPropertyCode(lValueCode, propertyTypeCode, *this);
 					}
 					else
 					{
