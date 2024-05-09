@@ -1,6 +1,7 @@
 ﻿#include "CodeParseTokenPropertyVector.h"
 
 #include "CodeParseTokenClass.h"
+#include "CodeParseTokenEnum.h"
 #include "CodeParseTokenStruct.h"
 #include "HeaderTool.h"
 #include "HeaderToolUtils.h"
@@ -11,7 +12,25 @@
 
 void CodeParseTokenPropertyVector::WriteToFile(std::ofstream& outputFile)
 {
-	outputFile << "vector " << propertyName << " " << dataType << std::endl;
+	std::string basicType = dataType;
+	
+#define MAP_BASIC_TYPE(Array, String) \
+	for (std::string& floatType : Array)\
+	{\
+		if (floatType == dataType)\
+		{\
+			basicType = String;\
+		}\
+	};
+
+	// We don't need to go as granular as "unsigned int 64". The vector just needs to know the general data type "int".
+	// This is because when we come to generating the code, the same code will work for all int types (thanks to implicit casting)
+	MAP_BASIC_TYPE(HeaderToolUtils::floatTypes, "float");
+	MAP_BASIC_TYPE(HeaderToolUtils::boolTypes, "bool");
+	MAP_BASIC_TYPE(HeaderToolUtils::intTypes, "int");
+	MAP_BASIC_TYPE(HeaderToolUtils::stringTypes, "string");
+	
+	outputFile << "vector " << propertyName << " " << basicType << std::endl;
 }
 
 std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const
@@ -53,6 +72,18 @@ std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::str
 	{
 		returnVal +=
 			"\t\t\t" + lValueString + ".push_back(static_cast<" + dataType + "*>(static_cast<EditorTypePropertyClass*>(instancedProperty.get())->GetValue()));\n";
+		break;
+	}
+	case EDataTypeClassification::Struct:
+	{
+		returnVal +=
+			"\t\t\t" + lValueString + ".push_back(*static_cast<" + dataType + "*>(static_cast<EditorTypePropertyStruct*>(instancedProperty.get())->GetValue()));\n";
+		break;
+	}
+	case EDataTypeClassification::Enum:
+	{
+		returnVal +=
+			"\t\t\t" + lValueString + ".push_back(static_cast<" + dataType + ">(static_cast<EditorTypePropertyEnum*>(instancedProperty.get())->GetValue()));\n";
 		break;
 	}
 	default:
@@ -114,6 +145,10 @@ CodeParseTokenPropertyVector::EDataTypeClassification CodeParseTokenPropertyVect
 			if (dynamic_cast<CodeParseTokenStruct*>(pToken))
 			{
 				return EDataTypeClassification::Struct;
+			}
+			if (dynamic_cast<CodeParseTokenEnum*>(pToken))
+			{
+				return EDataTypeClassification::Enum;
 			}
 		}
 	}

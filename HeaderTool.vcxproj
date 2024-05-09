@@ -139,8 +139,13 @@
     <ClCompile Include="CodeParseTokenBase.cpp" />
     <ClCompile Include="CodeParseTokenClass.cpp" />
     <ClCompile Include="CodeParseTokenDelimiter.cpp" />
+    <ClCompile Include="CodeParseTokenEnum.cpp" />
+    <ClCompile Include="CodeParseTokenEnumValue.cpp" />
     <ClCompile Include="CodeParseTokenFactoryBase.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClass.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryCommentBlock.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryEnum.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryEnumValue.cpp" />
     <ClCompile Include="CodeParseTokenFactoryProperty.cpp" />
     <ClCompile Include="CodeParseTokenFactoryScope.cpp" />
     <ClCompile Include="CodeParseTokenFactoryStruct.cpp" />
@@ -148,6 +153,7 @@
     <ClCompile Include="CodeParseTokenPropertyBase.cpp" />
     <ClCompile Include="CodeParseTokenPropertyBool.cpp" />
     <ClCompile Include="CodeParseTokenPropertyClass.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyEnum.cpp" />
     <ClCompile Include="CodeParseTokenPropertyFloat.cpp" />
     <ClCompile Include="CodeParseTokenPropertyInt.cpp" />
     <ClCompile Include="CodeParseTokenPropertyString.cpp" />
@@ -155,6 +161,7 @@
     <ClCompile Include="CodeParseTokenPropertyTypeBase.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeBool.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeClass.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeEnum.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeFloat.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeInt.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeString.cpp" />
@@ -172,8 +179,13 @@
     <ClInclude Include="CodeParseTokenBase.h" />
     <ClInclude Include="CodeParseTokenClass.h" />
     <ClInclude Include="CodeParseTokenDelimiter.h" />
+    <ClInclude Include="CodeParseTokenEnum.h" />
+    <ClInclude Include="CodeParseTokenEnumValue.h" />
     <ClInclude Include="CodeParseTokenFactoryBase.h" />
     <ClInclude Include="CodeParseTokenFactoryClass.h" />
+    <ClInclude Include="CodeParseTokenFactoryCommentBlock.h" />
+    <ClInclude Include="CodeParseTokenFactoryEnum.h" />
+    <ClInclude Include="CodeParseTokenFactoryEnumValue.h" />
     <ClInclude Include="CodeParseTokenFactoryProperty.h" />
     <ClInclude Include="CodeParseTokenFactoryScope.h" />
     <ClInclude Include="CodeParseTokenFactoryStruct.h" />
@@ -181,6 +193,7 @@
     <ClInclude Include="CodeParseTokenPropertyBase.h" />
     <ClInclude Include="CodeParseTokenPropertyBool.h" />
     <ClInclude Include="CodeParseTokenPropertyClass.h" />
+    <ClInclude Include="CodeParseTokenPropertyEnum.h" />
     <ClInclude Include="CodeParseTokenPropertyFloat.h" />
     <ClInclude Include="CodeParseTokenPropertyInt.h" />
     <ClInclude Include="CodeParseTokenPropertyString.h" />
@@ -188,6 +201,7 @@
     <ClInclude Include="CodeParseTokenPropertyTypeBase.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeBool.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeClass.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeEnum.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeFloat.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeInt.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeString.h" />

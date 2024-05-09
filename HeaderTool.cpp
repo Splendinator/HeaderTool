@@ -1,9 +1,11 @@
 #include "HeaderTool.h"
 
 #include "CodeParseTokenBase.h"
-#include "CodeParseTokenClass.h"
 #include "CodeParseTokenDelimiter.h"
 #include "CodeParseTokenFactoryClass.h"
+#include "CodeParseTokenFactoryCommentBlock.h"
+#include "CodeParseTokenFactoryEnum.h"
+#include "CodeParseTokenFactoryEnumValue.h"
 #include "CodeParseTokenFactoryProperty.h"
 #include "CodeParseTokenFactoryScope.h"
 #include "CodeParseTokenFactoryStruct.h"
@@ -19,9 +21,6 @@
 #include <fstream>
 #include <set>
 #include <sstream>
-
-// #TEMP: Optimisation
-#pragma optimize("", off)
 
 void HeaderTool::Run()
 {
@@ -85,9 +84,12 @@ void HeaderTool::Parse(std::string codeFile)
 	bool bCodeFileContainsEditorData = false; // Whether there's at least 1 editor relevant thing in this file. (used to know whether to #include the headers)
 	
 	// Set up token factories
+	CodeParseTokenFactoryCommentBlock codeParseTokenFactoryCommentBlock;
 	CodeParseTokenFactoryClass codeParseTokenFactoryClass;
 	CodeParseTokenFactoryStruct codeParseTokenFactoryStruct;
 	CodeParseTokenFactoryProperty codeParseTokenFactoryProperty;
+	CodeParseTokenFactoryEnum codeParseTokenFactoryEnum;
+	CodeParseTokenFactoryEnumValue codeParseTokenFactoryEnumValue;
 	CodeParseTokenFactoryScope codeParseTokenFactoryScope;
 
 	// Preceeding tokens (Only allow properties inside classes etc.)
@@ -96,13 +98,24 @@ void HeaderTool::Parse(std::string codeFile)
 	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryScope);
 	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryClass);
 	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryStruct);
+	codeParseTokenFactoryEnumValue.AddRequiredPrecedingToken(&codeParseTokenFactoryEnum);
+	
+	codeParseTokenFactoryClass.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryStruct.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryProperty.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryScope.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryEnum.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryEnumValue.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
 
 	CodeParseTokenFactoryBase* pFactories[] =
 	{
+		&codeParseTokenFactoryCommentBlock,
 		&codeParseTokenFactoryClass,
 		&codeParseTokenFactoryStruct,
 		&codeParseTokenFactoryProperty,
-		&codeParseTokenFactoryScope
+		&codeParseTokenFactoryEnum,
+		&codeParseTokenFactoryEnumValue,
+		&codeParseTokenFactoryScope,
 	};
 
 	// Parse code
@@ -119,28 +132,35 @@ void HeaderTool::Parse(std::string codeFile)
 		}
 
 		std::vector<std::string> subStrings = BreakDownParseString(nextString);
-		for (std::string substring : subStrings)
+		for (const std::string& substring : subStrings)
 		{
 			// Check for file requesting to be ignored
-			if (nextString == ImGuiEditorMacros::editorIgnoreFileString)
+			if (substring == ImGuiEditorMacros::editorIgnoreFileString)
 			{
 				DOMLOG_ERROR_IF(bCodeFileContainsEditorData, "Ignoring a file that is mid way through being parsed")
 				return;
 			}
+
+			// If we find a comment flush the rest of the line
+			if (substring == "//")
+			{
+				// #TODO: Is it better to have comments as a CokeToken? We could then export them to the EditorTypes to allow in-editor tooltips 
+				std::getline(stream, nextString);
+				break;
+			}
 			
 			// Check for end of scope
-			if (!activeScopedFactories.empty())
+			CodeParseTokenFactoryBase* pOuterScopedFactory = activeScopedFactories.empty() ? nullptr : activeScopedFactories.top();
+			if (pOuterScopedFactory)
 			{
-				CodeParseTokenFactoryBase* pScopedTokenType = activeScopedFactories.top();
-				std::string endString = pScopedTokenType->GetEndString();
+				std::string endString = pOuterScopedFactory->GetEndString();
 
 				if (substring == endString)
 				{
 					activeScopedFactories.pop();
 
-					if (activeScopedFactories.empty())
+					if (pOuterScopedFactory->ShouldAddDelimiterAfter())
 					{
-						// #JANK: We're just assuming if the outermost scope ends that we want newline for now because I can't be arsed. This should instead be tied to the scope type (i.e. class, struct, etc.) 
 						allTokens.push_back(new CodeParseTokenDelimiter);
 					}
 
@@ -153,24 +173,26 @@ void HeaderTool::Parse(std::string codeFile)
 			{
 				if (pFactory->CanFactoryBeUsed(activeScopedFactories) && pFactory->IsKeyword(substring))
 				{
-					CodeParseTokenBase* pToken = pFactory->CreateToken(substring, stream);
-					if (pToken)
+					if (pFactory->CanCreateToken())
 					{
-						allTokens.push_back(pToken);
-
-						bCodeFileContainsEditorData = true;
-
-						if (pFactory->IsScopedTokenType())
+						
+						if (CodeParseTokenBase* pToken = pFactory->CreateToken(substring, stream, pOuterScopedFactory))
 						{
-							activeScopedFactories.push(pFactory);
+							allTokens.push_back(pToken);
+							bCodeFileContainsEditorData = true;
 						}
-
-						break;
+						else
+						{
+							DOMLOG_ERROR("Cannot create token for keyword:", substring, "in file", codeFile);
+						}
 					}
-					else
+					
+					if (pFactory->IsScopedTokenType())
 					{
-						DOMLOG_ERROR("Cannot create token for keyword:", substring, "in file", codeFile);
+						activeScopedFactories.push(pFactory);
 					}
+
+					break;
 				}
 			}
 		}
@@ -270,15 +292,20 @@ void HeaderTool::SortCodeParseTokens()
 
 std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& parseString) const
 {
-	// #TODO: If we ever add "(" or ")" we need to make sure they don't collide with EDITORCLASS() etc.
+	// #NOTE: If we ever add "(" or ")" we need to make sure they don't collide with EDITORCLASS() etc.
+	// #TODO: Might be worth doing this as a pre-pass rather than as we go. Right now these relevant strings aren't extracted when doing CodeParseTokenFactoryBase::CreateToken()
 	static const std::string relevantStringsToExtract[] =
 	{
 		"//",
+		"/*",
+		"*/",
 		"{",
 		"}",
 		",",
+		"=",
 		ImGuiEditorMacros::editorClassString,
 		ImGuiEditorMacros::editorStructString,
+		ImGuiEditorMacros::editorEnumString,
 		ImGuiEditorMacros::editorPropertyString,
 		ImGuiEditorMacros::editorIgnoreFileString,
 	};
@@ -309,13 +336,6 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 	size_t lastPos = 0;
 	for (const FoundRelevantString& foundRelevantString : foundRelevantStrings)
 	{
-		if (foundRelevantString.relevantString == "//")
-		{
-			// If we find an inline comment then ignore any preceding strings.
-			// #TODO: This won't work with multiline comments
-			return subStrings;
-		}
-		
 		std::string prevString = parseString.substr(lastPos, foundRelevantString.index - lastPos);
 		if (prevString != "")
 		{
@@ -381,7 +401,9 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			"#include \"EditorTypePropertyBool.h\"\n"
 			"#include \"EditorTypePropertyString.h\"\n"
 			"#include \"EditorTypePropertyStruct.h\"\n"
-			"#include \"EditorTypePropertyVector.h\"\n";
+			"#include \"EditorTypePropertyVector.h\"\n"
+			"#include \"EditorTypePropertyEnum.h\"\n";
+	
 	
 	
 	// Include all relevant code files (since they will be used in InitFromProperties functions
@@ -467,5 +489,3 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	file << "	};\n"
 			"}\n";
 }
-
-#pragma optimize("", on)

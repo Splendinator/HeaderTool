@@ -3,9 +3,9 @@
 #include "CodeParseTokenBase.h"
 
 /** CodeParseTokenScope
-*
-* This class is used for scope. It doesn't write to a file and is just used to add to the scope stack.
-*/
+ *
+ * Used to represent a scope after a class/struct/enum.
+ */
 class CodeParseTokenScope : public CodeParseTokenBase
 {
 public:

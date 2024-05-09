@@ -11,7 +11,8 @@ class CodeParseTokenFactoryUDT : public CodeParseTokenFactoryBase
 public:
 	
 	//~ Begin CodeParseTokenFactoryBase Interface
-	CodeParseTokenBase* CreateToken(const std::string& keyword, std::stringstream& stream) final;
+	CodeParseTokenBase* CreateToken(const std::string& keyword, std::stringstream& stream, CodeParseTokenFactoryBase* pOuterScopedFactory) final;
+	bool ShouldAddDelimiterAfter() const { return true; }
 	std::string GetEndString() const final;
 	//~ End CodeParseTokenFactoryBase Interface
 	

@@ -3,7 +3,7 @@
 #include "CodeParseTokenUDT.h"
 #include "ImGuiEditorMacros.h"
 
-CodeParseTokenBase* CodeParseTokenFactoryUDT::CreateToken(const std::string& keyword, std::stringstream& stream)
+CodeParseTokenBase* CodeParseTokenFactoryUDT::CreateToken(const std::string& keyword, std::stringstream& stream, CodeParseTokenFactoryBase* pOuterScopedFactory)
 {
 	std::string nextString;
 	

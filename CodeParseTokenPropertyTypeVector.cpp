@@ -27,12 +27,6 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeVector::CreateParseTokenType(const
 	{
 		dataType = dataType.substr(0, pointerIndex);
 	}
-
-	size_t stdIndex = dataType.find("std::");
-	if (stdIndex != std::string::npos)
-	{
-		dataType = dataType.substr(stdIndex + std::size("std::") - 1);
-	}
 	
 	return new CodeParseTokenPropertyVector(propertyName, dataType);
 }

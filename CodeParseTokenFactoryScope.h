@@ -11,7 +11,7 @@ class CodeParseTokenFactoryScope : public CodeParseTokenFactoryBase
 public:
 	//~ Begin CodeParseTokenFactoryBase Interface
 	virtual bool IsKeyword(const std::string& keyword) override;
-	virtual CodeParseTokenBase* CreateToken(const std::string& keyword, std::stringstream& stream) override;
+	virtual bool CanCreateToken() const override { return false; }
 	virtual std::string GetEndString() const override;
 	//~ End CodeParseTokenFactoryBase Interface
 };
