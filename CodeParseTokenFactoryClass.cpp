@@ -5,12 +5,7 @@
 
 bool CodeParseTokenFactoryClass::IsKeyword(const std::string& keyword)
 {
-	return keyword == ImGuiEditorMacros::editorClassString;
-}
-
-std::string CodeParseTokenFactoryClass::GetUDTKeyword()
-{
-	return "class";
+	return keyword == "class";
 }
 
 CodeParseTokenBase* CodeParseTokenFactoryClass::CreateUDTToken(const std::string& udtName, const std::vector<std::string>& baseUdts)

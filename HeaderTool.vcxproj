@@ -138,17 +138,24 @@
   <ItemGroup>
     <ClCompile Include="CodeParseTokenBase.cpp" />
     <ClCompile Include="CodeParseTokenClass.cpp" />
+    <ClCompile Include="CodeParseTokenClassMetadata.cpp" />
+    <ClCompile Include="CodeParseTokenClassMetadataFlagBase.cpp" />
     <ClCompile Include="CodeParseTokenDelimiter.cpp" />
     <ClCompile Include="CodeParseTokenEnum.cpp" />
     <ClCompile Include="CodeParseTokenEnumValue.cpp" />
     <ClCompile Include="CodeParseTokenFactoryBase.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClass.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryClassMetadata.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagAbstract.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagInstanced.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagSingleton.cpp" />
     <ClCompile Include="CodeParseTokenFactoryCommentBlock.cpp" />
     <ClCompile Include="CodeParseTokenFactoryEnum.cpp" />
     <ClCompile Include="CodeParseTokenFactoryEnumValue.cpp" />
     <ClCompile Include="CodeParseTokenFactoryProperty.cpp" />
     <ClCompile Include="CodeParseTokenFactoryScope.cpp" />
     <ClCompile Include="CodeParseTokenFactoryStruct.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryStructMetadata.cpp" />
     <ClCompile Include="CodeParseTokenFactoryUDT.cpp" />
     <ClCompile Include="CodeParseTokenPropertyBase.cpp" />
     <ClCompile Include="CodeParseTokenPropertyBool.cpp" />
@@ -170,6 +177,7 @@
     <ClCompile Include="CodeParseTokenPropertyVector.cpp" />
     <ClCompile Include="CodeParseTokenScope.cpp" />
     <ClCompile Include="CodeParseTokenStruct.cpp" />
+    <ClCompile Include="CodeParseTokenStructMetadata.cpp" />
     <ClCompile Include="CodeParseTokenUDT.cpp" />
     <ClCompile Include="HeaderTool.cpp" />
     <ClCompile Include="HeaderToolUtils.cpp" />
@@ -178,17 +186,24 @@
   <ItemGroup>
     <ClInclude Include="CodeParseTokenBase.h" />
     <ClInclude Include="CodeParseTokenClass.h" />
+    <ClInclude Include="CodeParseTokenClassMetadata.h" />
+    <ClInclude Include="CodeParseTokenClassMetadataFlagBase.h" />
     <ClInclude Include="CodeParseTokenDelimiter.h" />
     <ClInclude Include="CodeParseTokenEnum.h" />
     <ClInclude Include="CodeParseTokenEnumValue.h" />
     <ClInclude Include="CodeParseTokenFactoryBase.h" />
     <ClInclude Include="CodeParseTokenFactoryClass.h" />
+    <ClInclude Include="CodeParseTokenFactoryClassMetadata.h" />
+    <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagAbstract.h" />
+    <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagInstanced.h" />
+    <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagSingleton.h" />
     <ClInclude Include="CodeParseTokenFactoryCommentBlock.h" />
     <ClInclude Include="CodeParseTokenFactoryEnum.h" />
     <ClInclude Include="CodeParseTokenFactoryEnumValue.h" />
     <ClInclude Include="CodeParseTokenFactoryProperty.h" />
     <ClInclude Include="CodeParseTokenFactoryScope.h" />
     <ClInclude Include="CodeParseTokenFactoryStruct.h" />
+    <ClInclude Include="CodeParseTokenFactoryStructMetadata.h" />
     <ClInclude Include="CodeParseTokenFactoryUDT.h" />
     <ClInclude Include="CodeParseTokenPropertyBase.h" />
     <ClInclude Include="CodeParseTokenPropertyBool.h" />
@@ -210,6 +225,7 @@
     <ClInclude Include="CodeParseTokenPropertyVector.h" />
     <ClInclude Include="CodeParseTokenScope.h" />
     <ClInclude Include="CodeParseTokenStruct.h" />
+    <ClInclude Include="CodeParseTokenStructMetadata.h" />
     <ClInclude Include="CodeParseTokenUDT.h" />
     <ClInclude Include="HeaderTool.h" />
     <ClInclude Include="HeaderToolUtils.h" />

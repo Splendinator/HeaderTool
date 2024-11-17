@@ -6,6 +6,8 @@
 #include <vector>
 #include <sstream>
 
+#include "CodeParseTokenBase.h"
+
 #include "DomLog/DomLog.h"
 
 class CodeParseTokenBase;
@@ -32,20 +34,23 @@ public:
 	// Used for things like enums and classes.
 	virtual std::string GetEndString() const { return ""; }
 
-	// Whether this factory actually producted a token (some are just used to block others via AddBlockedByPrecedingToken() etc.)
+	// Whether this factory actually producted a token (some are just used to block others via AddBlockedByPrecedingScope() etc.)
 	virtual bool CanCreateToken() const { return true; }
 
 	// Whether this scoped class should add a delimiter in the EditorTypes file after it pops off
 	virtual bool ShouldAddDelimiterAfter() const { return false; }
 	
-	// See pPrecedingTokenTypes
-	void AddRequiredPrecedingToken(CodeParseTokenFactoryBase* pInPrecedingTokenType) { pPrecedingTokenTypes.push_back(pInPrecedingTokenType); }
+	// See preceedingTokenType
+	void SetPrecedingTokenType(ECodeParseTokenType inPrecedingTokenTypes) { preceedingTokenType = inPrecedingTokenTypes; }
 
-	// See pBlockedByTokenTypes
-	void AddBlockedByPrecedingToken(CodeParseTokenFactoryBase* pBlockTokenType) { pBlockedByTokenTypes.push_back(pBlockTokenType); }
+	// See pPrecedingScopes
+	void AddRequiredPrecedingScope(CodeParseTokenFactoryBase* pInPrecedingTokenType) { pPrecedingScopes.push_back(pInPrecedingTokenType); }
 
+	// See pBlockedByScopes
+	void AddBlockedByPrecedingScope(CodeParseTokenFactoryBase* pBlockTokenType) { pBlockedByScopes.push_back(pBlockTokenType); }
+	
 	// Returns whether this token type can be created based on the current stack. For example, only if the previous token was a class token, then a property token can be created.
-	bool CanFactoryBeUsed(std::stack<CodeParseTokenFactoryBase*> currentStack) const;
+	bool CanFactoryBeUsed(std::stack<CodeParseTokenFactoryBase*> currentStack, ECodeParseTokenType inPreceedingTokenType) const;
 
 	// Returns whether this is a "scoped" token type and should be added to the stack. See GetEndString()
 	bool IsScopedTokenType() const { return GetEndString() != ""; }
@@ -53,8 +58,11 @@ public:
 private: 
 
 	// Block any of these token factories while this is scoped 
-	std::vector<CodeParseTokenFactoryBase*> pBlockedByTokenTypes;
+	std::vector<CodeParseTokenFactoryBase*> pBlockedByScopes;
 	
 	// Token that must be on the top of the stack before this token can be parsed. (i.e "enum" must be on the stack before "enum value" can be parsed)
-	std::vector<CodeParseTokenFactoryBase*> pPrecedingTokenTypes;
+	std::vector<CodeParseTokenFactoryBase*> pPrecedingScopes;
+
+	// Token that must be immediately before this token for it to count (i.e "EDITORCLASS(Abstract, Instanced)" before "class"
+	ECodeParseTokenType preceedingTokenType = ECodeParseTokenType::UNUSED;
 };

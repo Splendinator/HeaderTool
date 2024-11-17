@@ -14,6 +14,7 @@ public:
 	
 	//~ Begin CodeParseTokenUDT Interface
 	virtual std::string GetUDTTypeName() override {return "Struct";}
+	virtual ECodeParseTokenPriority GetPriorityWithinBlock() const override {return ECodeParseTokenPriority::High;}
 	//~ End CodeParseTokenUDT Interface
 	
 };

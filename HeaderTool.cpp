@@ -3,12 +3,17 @@
 #include "CodeParseTokenBase.h"
 #include "CodeParseTokenDelimiter.h"
 #include "CodeParseTokenFactoryClass.h"
+#include "CodeParseTokenFactoryClassMetadata.h"
+#include "CodeParseTokenFactoryClassMetadataFlagAbstract.h"
+#include "CodeParseTokenFactoryClassMetadataFlagInstanced.h"
+#include "CodeParseTokenFactoryClassMetadataFlagSingleton.h"
 #include "CodeParseTokenFactoryCommentBlock.h"
 #include "CodeParseTokenFactoryEnum.h"
 #include "CodeParseTokenFactoryEnumValue.h"
 #include "CodeParseTokenFactoryProperty.h"
 #include "CodeParseTokenFactoryScope.h"
 #include "CodeParseTokenFactoryStruct.h"
+#include "CodeParseTokenFactoryStructMetadata.h"
 #include "CodeParseTokenPropertyBase.h"
 #include "CodeParseTokenScope.h"
 #include "CodeParseTokenStruct.h"
@@ -21,6 +26,8 @@
 #include <fstream>
 #include <set>
 #include <sstream>
+
+#include "CodeParseTokenClassMetadata.h"
 
 void HeaderTool::Run()
 {
@@ -91,21 +98,40 @@ void HeaderTool::Parse(std::string codeFile)
 	CodeParseTokenFactoryEnum codeParseTokenFactoryEnum;
 	CodeParseTokenFactoryEnumValue codeParseTokenFactoryEnumValue;
 	CodeParseTokenFactoryScope codeParseTokenFactoryScope;
-
-	// Preceeding tokens (Only allow properties inside classes etc.)
-	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryClass);
-	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryStruct);
-	codeParseTokenFactoryScope.AddRequiredPrecedingToken(&codeParseTokenFactoryScope);
-	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryClass);
-	codeParseTokenFactoryProperty.AddRequiredPrecedingToken(&codeParseTokenFactoryStruct);
-	codeParseTokenFactoryEnumValue.AddRequiredPrecedingToken(&codeParseTokenFactoryEnum);
+	CodeParseTokenFactoryClassMetadata codeParseTokenFactoryClassMetadata;
+	CodeParseTokenFactoryStructMetadata codeParseTokenFactoryStructMetadata;
+	CodeParseTokenFactoryClassMetadataFlagAbstract codeParseTokenFactoryClassMetadataFlagAbstract;  
+	CodeParseTokenFactoryClassMetadataFlagSingleton codeParseTokenFactoryClassMetadataFlagSingleton;
+	CodeParseTokenFactoryClassMetadataFlagInstanced codeParseTokenFactoryClassMetadataFlagInstanced;
 	
-	codeParseTokenFactoryClass.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
-	codeParseTokenFactoryStruct.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
-	codeParseTokenFactoryProperty.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
-	codeParseTokenFactoryScope.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
-	codeParseTokenFactoryEnum.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
-	codeParseTokenFactoryEnumValue.AddBlockedByPrecedingToken(&codeParseTokenFactoryCommentBlock);
+
+	// Preceeding scopes (Only allow properties inside classes etc.)
+	codeParseTokenFactoryScope.AddRequiredPrecedingScope(&codeParseTokenFactoryClass);
+	codeParseTokenFactoryScope.AddRequiredPrecedingScope(&codeParseTokenFactoryStruct);
+	codeParseTokenFactoryScope.AddRequiredPrecedingScope(&codeParseTokenFactoryScope);
+	codeParseTokenFactoryProperty.AddRequiredPrecedingScope(&codeParseTokenFactoryClass);
+	codeParseTokenFactoryProperty.AddRequiredPrecedingScope(&codeParseTokenFactoryStruct);
+	codeParseTokenFactoryEnumValue.AddRequiredPrecedingScope(&codeParseTokenFactoryEnum);
+	codeParseTokenFactoryClassMetadataFlagAbstract.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);  
+	codeParseTokenFactoryClassMetadataFlagSingleton.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);
+	codeParseTokenFactoryClassMetadataFlagInstanced.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);
+
+	// Preceeding tokens (Only allow class after class metadata, i.e "class" after "EDITORCLASS(Abstract)"
+	codeParseTokenFactoryClass.SetPrecedingTokenType(ECodeParseTokenType::ClassMetadata);
+	codeParseTokenFactoryStruct.SetPrecedingTokenType(ECodeParseTokenType::StructMetadata);
+
+	// Blocked scopes (don't allow anything in comment blocks)
+	codeParseTokenFactoryClass.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryStruct.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryProperty.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryScope.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryEnum.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryEnumValue.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryClassMetadata.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryStructMetadata.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryClassMetadataFlagAbstract.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryClassMetadataFlagSingleton.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryClassMetadataFlagInstanced.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
 
 	CodeParseTokenFactoryBase* pFactories[] =
 	{
@@ -116,6 +142,11 @@ void HeaderTool::Parse(std::string codeFile)
 		&codeParseTokenFactoryEnum,
 		&codeParseTokenFactoryEnumValue,
 		&codeParseTokenFactoryScope,
+		&codeParseTokenFactoryClassMetadata,
+		&codeParseTokenFactoryStructMetadata,
+		&codeParseTokenFactoryClassMetadataFlagAbstract,
+		&codeParseTokenFactoryClassMetadataFlagSingleton,
+		&codeParseTokenFactoryClassMetadataFlagInstanced,
 	};
 
 	// Parse code
@@ -171,7 +202,8 @@ void HeaderTool::Parse(std::string codeFile)
 			// Check factories
 			for (CodeParseTokenFactoryBase* pFactory : pFactories)
 			{
-				if (pFactory->CanFactoryBeUsed(activeScopedFactories) && pFactory->IsKeyword(substring))
+				ECodeParseTokenType priorTokenType = allTokens.size() > 0 ? allTokens.back()->GetCodeParseTokenType() : ECodeParseTokenType::UNUSED;
+				if (pFactory->IsKeyword(substring) && pFactory->CanFactoryBeUsed(activeScopedFactories, priorTokenType))
 				{
 					if (pFactory->CanCreateToken())
 					{
@@ -208,86 +240,98 @@ void HeaderTool::Parse(std::string codeFile)
 
 void HeaderTool::SortCodeParseTokens()
 {
-	std::vector<CodeParseTokenBase*> sortedTokens;
-	sortedTokens.reserve(allTokens.size());
-
-	std::set<std::string> satisfiedDependencies; // Ever growing vector of satisfied dependencies
-
-	// Start off with default types as a given
-	for (std::string& basicType : HeaderToolUtils::GetBasicTypes())
+	// STEP 1 -- Sort by dependencies
 	{
-		satisfiedDependencies.emplace(basicType);
-	}
-
-	// While tokens remain...
-	while (!allTokens.empty())
-	{
-		int numTokensBeforeLoop = (int)allTokens.size();
-		int tokenIndex = numTokensBeforeLoop - 2; // Last token will be delimiter, so skip it
-		int lastSegmentIndex = numTokensBeforeLoop - 1; 
-		std::set<std::string> allRequiredDependencies;
-
-		while (tokenIndex >= -1) // use "-1" so we can tell if we've reached the end (vs hitting a delimiter)
+		std::vector<CodeParseTokenBase*> sortedTokens;
+		sortedTokens.reserve(allTokens.size());
+	
+		std::set<std::string> satisfiedDependencies; // Ever growing vector of satisfied dependencies
+		
+		// Start off with default types as a given
+		for (std::string& basicType : HeaderToolUtils::GetBasicTypes())
 		{
-			// Iterate all tokens backwards, finding segments (between delimiters and EOF) that can be added.
-			
-			CodeParseTokenBase* pToken = tokenIndex >= 0 ? allTokens[tokenIndex] : nullptr;
-			if (tokenIndex == -1 || dynamic_cast<CodeParseTokenDelimiter*>(pToken))
-			{
-				// Delimiter found, iterate segment
-				bool bDependenciesSatisfied = true;
-				for (const std::string& requiredDependency : allRequiredDependencies)
-				{
-					if (satisfiedDependencies.find(requiredDependency) == satisfiedDependencies.end())
-					{
-						bDependenciesSatisfied = false;
-						break;
-					}
-				}
-				
-				if (bDependenciesSatisfied)
-				{
-					// Dependencies satisfied, add the segment to the sorted array
-					for (int segmentIndex = tokenIndex + 1; segmentIndex <= lastSegmentIndex; ++segmentIndex)
-					{
-						sortedTokens.push_back(allTokens[segmentIndex]);
+			satisfiedDependencies.emplace(basicType);
+		}
 
-						std::string requiredDependency = allTokens[segmentIndex]->GetSatisfiedDependency();
-						if (requiredDependency != "")
+		// While tokens remain...
+		while (!allTokens.empty())
+		{
+			int numTokensBeforeLoop = (int)allTokens.size();
+			int tokenIndex = numTokensBeforeLoop - 2; // Last token will be delimiter, so skip it
+			int lastSegmentIndex = numTokensBeforeLoop - 1; 
+			std::set<std::string> allRequiredDependencies;
+
+			while (tokenIndex >= -1) // use "-1" so we can tell if we've reached the end (vs hitting a delimiter)
+			{
+				// Iterate all tokens backwards, finding segments (between delimiters and EOF) that can be added.
+			
+				CodeParseTokenBase* pToken = tokenIndex >= 0 ? allTokens[tokenIndex] : nullptr;
+				if (tokenIndex == -1 || pToken->GetCodeParseTokenType() == ECodeParseTokenType::Delimiter)
+				{
+					// Delimiter found, iterate segment
+					bool bDependenciesSatisfied = true;
+					for (const std::string& requiredDependency : allRequiredDependencies)
+					{
+						if (satisfiedDependencies.find(requiredDependency) == satisfiedDependencies.end())
 						{
-							// Mark satisfied dependencies as such
-							satisfiedDependencies.emplace(requiredDependency);
+							bDependenciesSatisfied = false;
+							break;
 						}
 					}
+				
+					if (bDependenciesSatisfied)
+					{
+						// Dependencies satisfied, add the segment to the sorted array
 
-					// Remove the segment from the unsorted array
-					allTokens.erase(allTokens.begin() +  tokenIndex + 1, allTokens.begin() + lastSegmentIndex + 1);
+						// Within each block sort further by ECodeParseTokenPriority 
+						for (int priority = (int)ECodeParseTokenPriority::COUNT - 1; priority >= 0; --priority)
+						{
+							for (int segmentIndex = tokenIndex + 1; segmentIndex <= lastSegmentIndex; ++segmentIndex)
+							{
+								if ((int)allTokens[segmentIndex]->GetPriorityWithinBlock() != priority)
+								{
+									continue;
+								}
+								
+								sortedTokens.push_back(allTokens[segmentIndex]);
+
+								std::string requiredDependency = allTokens[segmentIndex]->GetSatisfiedDependency();
+								if (requiredDependency != "")
+								{
+									// Mark satisfied dependencies as such
+									satisfiedDependencies.emplace(requiredDependency);
+								}
+							}
+						}
+
+						// Remove the segment from the unsorted array
+						allTokens.erase(allTokens.begin() +  tokenIndex + 1, allTokens.begin() + lastSegmentIndex + 1);
+					}
+
+					lastSegmentIndex = tokenIndex;
+					--tokenIndex;
+					allRequiredDependencies.erase(allRequiredDependencies.begin(), allRequiredDependencies.end());
 				}
-
-				lastSegmentIndex = tokenIndex;
-				--tokenIndex;
-				allRequiredDependencies.erase(allRequiredDependencies.begin(), allRequiredDependencies.end());
-			}
-			else
-			{
-				// No delimiter, continue along section
-				std::vector<std::string> requiredDependencies = pToken->GetRequiredDependencies();
-				for(const std::string& requiredDependency : requiredDependencies)
+				else
 				{
-					allRequiredDependencies.emplace(requiredDependency);
+					// No delimiter, continue along section
+					std::vector<std::string> requiredDependencies = pToken->GetRequiredDependencies();
+					for(const std::string& requiredDependency : requiredDependencies)
+					{
+						allRequiredDependencies.emplace(requiredDependency);
+					}
+					--tokenIndex;
 				}
-				--tokenIndex;
+			}
+
+			if (allTokens.size() == numTokensBeforeLoop)
+			{
+				DOMLOG_ERROR("Infinite Loop! Circular Dependencies?")
+				return;
 			}
 		}
-
-		if (allTokens.size() == numTokensBeforeLoop)
-		{
-			DOMLOG_ERROR("Infinite Loop! Circular Dependencies?")
-			return;
-		}
+		allTokens = std::move(sortedTokens);
 	}
-
-	allTokens = sortedTokens;
 }
 
 std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& parseString) const
@@ -308,6 +352,9 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 		ImGuiEditorMacros::editorEnumString,
 		ImGuiEditorMacros::editorPropertyString,
 		ImGuiEditorMacros::editorIgnoreFileString,
+		"Abstract",
+		"Instanced",
+		"Singleton",
 	};
 
 	struct FoundRelevantString
@@ -403,7 +450,7 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			"#include \"EditorTypePropertyStruct.h\"\n"
 			"#include \"EditorTypePropertyVector.h\"\n"
 			"#include \"EditorTypePropertyEnum.h\"\n";
-	
+
 	
 	
 	// Include all relevant code files (since they will be used in InitFromProperties functions
@@ -412,6 +459,11 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	{
 		file << "#include \"" << relevantCodeFile << "\"\n";
 	}
+	file << "\n";
+
+	file << "#pragma warning( disable : 4189 )"; // Suppress "local variable is initialized but not referenced". Necessary else EDITORCLASSES with no properties cause compile errors
+	
+	file << "\n";
 	file << "\n";
 	
 	// Add all class and struct InitFromProperties() and InitFromPropertiesSubset() functions
@@ -439,7 +491,7 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 				{
 					CodeParseTokenBase* pToken = allTokens[++index];
 
-					if (dynamic_cast<CodeParseTokenScope*>(pToken))
+					if (dynamic_cast<CodeParseTokenScope*>(pToken) || pToken->GetCodeParseTokenType() == ECodeParseTokenType::ClassMetadata || pToken->GetCodeParseTokenType() == ECodeParseTokenType::StructMetadata)
 					{
 						// Ignore scope tokens, they are allowed to be interspersed within a class.
 					}

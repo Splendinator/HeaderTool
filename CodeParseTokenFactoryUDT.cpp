@@ -6,14 +6,6 @@
 CodeParseTokenBase* CodeParseTokenFactoryUDT::CreateToken(const std::string& keyword, std::stringstream& stream, CodeParseTokenFactoryBase* pOuterScopedFactory)
 {
 	std::string nextString;
-	
-	stream >> nextString;
-	if (nextString != GetUDTKeyword())
-	{
-		DOMLOG_ERROR("Expecting", GetUDTKeyword(), "but got", nextString);
-		return nullptr;
-	}
-	
 	std::string udtName;
 	std::vector<std::string> baseUdts;
 	

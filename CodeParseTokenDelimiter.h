@@ -13,5 +13,6 @@ public:
 
     //~ Begin CodeParseTokenBase Interface
     virtual void WriteToFile(std::ofstream& outputFile) override;
+    ECodeParseTokenType GetCodeParseTokenType() const override {return ECodeParseTokenType::Delimiter;}
     //~ End CodeParseTokenBase Interface
 };

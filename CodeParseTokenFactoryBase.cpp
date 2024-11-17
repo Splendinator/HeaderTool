@@ -1,15 +1,21 @@
 #include "CodeParseTokenFactoryBase.h"
 
-bool CodeParseTokenFactoryBase::CanFactoryBeUsed(std::stack<CodeParseTokenFactoryBase*> currentStack) const
+bool CodeParseTokenFactoryBase::CanFactoryBeUsed(std::stack<CodeParseTokenFactoryBase*> currentStack, ECodeParseTokenType inPreceedingTokenType) const
 {
+	// Check that the token directly prior is correct
+	if (preceedingTokenType != ECodeParseTokenType::UNUSED && preceedingTokenType != inPreceedingTokenType)
+	{
+		return false;
+	}
+	
 	// Check that the token directly above is there if required
-	if (!pPrecedingTokenTypes.empty())
+	if (!pPrecedingScopes.empty())
 	{
 		if (currentStack.empty())
 		{
 			return false;
 		}
-		if (std::find(pPrecedingTokenTypes.begin(), pPrecedingTokenTypes.end(), currentStack.top()) == pPrecedingTokenTypes.end())
+		if (std::find(pPrecedingScopes.begin(), pPrecedingScopes.end(), currentStack.top()) == pPrecedingScopes.end())
 		{
 			return false;
 		}
@@ -18,7 +24,7 @@ bool CodeParseTokenFactoryBase::CanFactoryBeUsed(std::stack<CodeParseTokenFactor
 	// Check that the token directly above isn't blocking us
 	if (!currentStack.empty())
 	{
-		for (CodeParseTokenFactoryBase* pBlockedByTokenType : pBlockedByTokenTypes)
+		for (CodeParseTokenFactoryBase* pBlockedByTokenType : pBlockedByScopes)
 		{
 			if (currentStack.top() == pBlockedByTokenType)
 			{
