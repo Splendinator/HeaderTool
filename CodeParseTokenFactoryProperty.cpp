@@ -4,6 +4,7 @@
 #include "CodeParseTokenPropertyTypeClass.h"
 #include "CodeParseTokenPropertyTypeEnum.h"
 #include "CodeParseTokenPropertyTypeFloat.h"
+#include "CodeParseTokenPropertyTypeInstancedAsset.h"
 #include "CodeParseTokenPropertyTypeInt.h"
 #include "CodeParseTokenPropertyTypeString.h"
 #include "CodeParseTokenPropertyTypeStruct.h"
@@ -25,6 +26,7 @@ CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string
 	CodeParseTokenPropertyTypeInt propertyTypeInt;
 	CodeParseTokenPropertyTypeString propertyTypeString;
 	CodeParseTokenPropertyTypeBool propertyTypeBool;
+	CodeParseTokenPropertyTypeInstancedAsset propertyTypeInstancedAsset;
 	CodeParseTokenPropertyTypeVector propertyTypeVector;
 	CodeParseTokenPropertyTypeClass propertyTypeClass;
 	CodeParseTokenPropertyTypeEnum propertyTypeEnum;
@@ -36,6 +38,7 @@ CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string
 		&propertyTypeInt,
 		&propertyTypeString,
 		&propertyTypeBool,
+		&propertyTypeInstancedAsset,
 		&propertyTypeVector,
 		&propertyTypeClass,
 		&propertyTypeEnum,

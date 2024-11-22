@@ -449,7 +449,9 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			"#include \"EditorTypePropertyString.h\"\n"
 			"#include \"EditorTypePropertyStruct.h\"\n"
 			"#include \"EditorTypePropertyVector.h\"\n"
-			"#include \"EditorTypePropertyEnum.h\"\n";
+			"#include \"EditorTypePropertyEnum.h\"\n"
+			"#include \"EditorTypePropertyInstancedAssetPtr.h\"\n";
+	
 
 	
 	

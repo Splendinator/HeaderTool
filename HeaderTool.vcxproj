@@ -162,6 +162,7 @@
     <ClCompile Include="CodeParseTokenPropertyClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyEnum.cpp" />
     <ClCompile Include="CodeParseTokenPropertyFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyInstancedAssetPtr.cpp" />
     <ClCompile Include="CodeParseTokenPropertyInt.cpp" />
     <ClCompile Include="CodeParseTokenPropertyString.cpp" />
     <ClCompile Include="CodeParseTokenPropertyStruct.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="CodeParseTokenPropertyTypeClass.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeEnum.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeFloat.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeInstancedAsset.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeInt.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeString.cpp" />
     <ClCompile Include="CodeParseTokenPropertyTypeStruct.cpp" />
@@ -210,6 +212,7 @@
     <ClInclude Include="CodeParseTokenPropertyClass.h" />
     <ClInclude Include="CodeParseTokenPropertyEnum.h" />
     <ClInclude Include="CodeParseTokenPropertyFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyInstancedAssetPtr.h" />
     <ClInclude Include="CodeParseTokenPropertyInt.h" />
     <ClInclude Include="CodeParseTokenPropertyString.h" />
     <ClInclude Include="CodeParseTokenPropertyStruct.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="CodeParseTokenPropertyTypeClass.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeEnum.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeFloat.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeInstancedAsset.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeInt.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeString.h" />
     <ClInclude Include="CodeParseTokenPropertyTypeStruct.h" />

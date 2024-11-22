@@ -24,6 +24,7 @@ C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyBool.cpp;C:\U
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyClass.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyClass.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyEnum.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyEnum.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyFloat.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyFloat.obj
+C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyInstancedAssetPtr.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyInstancedAssetPtr.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyInt.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyInt.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyString.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyString.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyStruct.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyStruct.obj
@@ -32,6 +33,7 @@ C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeBool.cpp;
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeClass.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeClass.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeEnum.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeEnum.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeFloat.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeFloat.obj
+C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeInstancedAsset.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeInstancedAsset.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeInt.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeInt.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeString.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeString.obj
 C:\Users\Dominic\Desktop\TempGame\HeaderTool\CodeParseTokenPropertyTypeStruct.cpp;C:\Users\Dominic\Desktop\TempGame\HeaderTool\x64\Release\CodeParseTokenPropertyTypeStruct.obj
