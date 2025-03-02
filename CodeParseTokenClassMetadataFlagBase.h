@@ -40,3 +40,11 @@ protected:
     std::string GetKeyword() override { return "Singleton"; }
     //~ End CodeParseTokenClassMetadataFlagBase Interface
 };
+
+class CodeParseTokenClassMetadataFlagEditInlineNew : public CodeParseTokenClassMetadataFlagBase
+{
+protected:
+    //~ Begin CodeParseTokenClassMetadataFlagBase Interface
+    std::string GetKeyword() override { return "EditInlineNew"; }
+    //~ End CodeParseTokenClassMetadataFlagBase Interface
+};

@@ -2,5 +2,5 @@
 
 void CodeParseTokenClassMetadata::WriteToFile(std::ofstream& outputFile)
 {
-	// #TEMP: TODO
+	// Not written, individual flags write instead (CodeParseTokenClassMetadataFlagBase) 
 }

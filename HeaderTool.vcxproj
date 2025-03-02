@@ -147,6 +147,7 @@
     <ClCompile Include="CodeParseTokenFactoryClass.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClassMetadata.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagAbstract.cpp" />
+    <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagEditInlineNew.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagInstanced.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagSingleton.cpp" />
     <ClCompile Include="CodeParseTokenFactoryCommentBlock.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="CodeParseTokenFactoryClass.h" />
     <ClInclude Include="CodeParseTokenFactoryClassMetadata.h" />
     <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagAbstract.h" />
+    <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagEditInlineNew.h" />
     <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagInstanced.h" />
     <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagSingleton.h" />
     <ClInclude Include="CodeParseTokenFactoryCommentBlock.h" />

@@ -50,7 +50,13 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeFloat::CreateParseTokenType(const 
 			defaultValue = "0.0f";
 		}
 	}
-		
+	
+	if (defaultValue.find('.') == std::string::npos)
+	{
+		// In case of float f = 5; treat it as 5.0f;
+		defaultValue.append(".0f");
+	}
+	
 	DOMLOG_ERROR_IF(defaultValue.substr(defaultValue.size() - 1, 1) != "f", "default float value not in correct format, must end in f");
 	defaultValue = defaultValue.substr(0, defaultValue.size() - 1); // cut off the f
 	

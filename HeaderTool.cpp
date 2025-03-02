@@ -28,6 +28,7 @@
 #include <sstream>
 
 #include "CodeParseTokenClassMetadata.h"
+#include "CodeParseTokenFactoryClassMetadataFlagEditInlineNew.h"
 
 void HeaderTool::Run()
 {
@@ -103,6 +104,7 @@ void HeaderTool::Parse(std::string codeFile)
 	CodeParseTokenFactoryClassMetadataFlagAbstract codeParseTokenFactoryClassMetadataFlagAbstract;  
 	CodeParseTokenFactoryClassMetadataFlagSingleton codeParseTokenFactoryClassMetadataFlagSingleton;
 	CodeParseTokenFactoryClassMetadataFlagInstanced codeParseTokenFactoryClassMetadataFlagInstanced;
+	CodeParseTokenFactoryClassMetadataFlagEditInlineNew codeParseTokenFactoryClassMetadataFlagEditInlineNew;
 	
 
 	// Preceeding scopes (Only allow properties inside classes etc.)
@@ -115,6 +117,7 @@ void HeaderTool::Parse(std::string codeFile)
 	codeParseTokenFactoryClassMetadataFlagAbstract.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);  
 	codeParseTokenFactoryClassMetadataFlagSingleton.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);
 	codeParseTokenFactoryClassMetadataFlagInstanced.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);
+	codeParseTokenFactoryClassMetadataFlagEditInlineNew.AddRequiredPrecedingScope(&codeParseTokenFactoryClassMetadata);
 
 	// Preceeding tokens (Only allow class after class metadata, i.e "class" after "EDITORCLASS(Abstract)"
 	codeParseTokenFactoryClass.SetPrecedingTokenType(ECodeParseTokenType::ClassMetadata);
@@ -132,6 +135,7 @@ void HeaderTool::Parse(std::string codeFile)
 	codeParseTokenFactoryClassMetadataFlagAbstract.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
 	codeParseTokenFactoryClassMetadataFlagSingleton.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
 	codeParseTokenFactoryClassMetadataFlagInstanced.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
+	codeParseTokenFactoryClassMetadataFlagEditInlineNew.AddBlockedByPrecedingScope(&codeParseTokenFactoryCommentBlock);
 
 	CodeParseTokenFactoryBase* pFactories[] =
 	{
@@ -147,6 +151,7 @@ void HeaderTool::Parse(std::string codeFile)
 		&codeParseTokenFactoryClassMetadataFlagAbstract,
 		&codeParseTokenFactoryClassMetadataFlagSingleton,
 		&codeParseTokenFactoryClassMetadataFlagInstanced,
+		&codeParseTokenFactoryClassMetadataFlagEditInlineNew,
 	};
 
 	// Parse code
@@ -355,6 +360,7 @@ std::vector<std::string> HeaderTool::BreakDownParseString(const std::string& par
 		"Abstract",
 		"Instanced",
 		"Singleton",
+		"EditInlineNew",
 	};
 
 	struct FoundRelevantString
