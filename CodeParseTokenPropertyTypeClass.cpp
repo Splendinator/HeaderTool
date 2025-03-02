@@ -20,6 +20,12 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeClass::CreateParseTokenType(const 
 	std::string className;
 	std::string classPropertyName;
 	stream >> className;
+
+	if (className == "const")
+	{
+		// Ignore const
+		stream >> className;
+	}
 	stream >> classPropertyName;
 	
 	if (className[className.length()-1] == '*')

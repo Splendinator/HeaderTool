@@ -22,6 +22,11 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeVector::CreateParseTokenType(const
 	std::string dataType = property.substr(templateBeginPos + 1, templateEndPos - templateBeginPos - 1);
 	std::string propertyName = property.substr(templateEndPos + 2, semiColonPos - templateEndPos - 2);
 
+	if (dataType.substr(0,  6) == "const ")
+	{
+		dataType = dataType.substr(6, dataType.size() - 6);
+	}
+	
 	size_t pointerIndex = dataType.find('*');
 	if (pointerIndex != std::string::npos)
 	{
