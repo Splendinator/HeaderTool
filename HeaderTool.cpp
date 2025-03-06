@@ -440,6 +440,10 @@ void HeaderTool::WriteGlobalHeaderFile(std::ofstream& file)
 			"{\n"
 			"	// This works for both structs and classes.\n"
 			"	extern std::unordered_map<std::string, void* (*)(const std::vector<EditorTypePropertyBase*>&)> stringToCreateObjectFunction;\n"
+			"	\n"
+			"	// These two combined do the same thing as the top one. These are useful if you want to defer initialising the properties for some reason (we use it for singletons to prevent circular dependencies)\n"
+			"	extern std::unordered_map<std::string, void* (*)()> stringToCreateEmptyObjectFunction;\n"
+			"	extern std::unordered_map<std::string, void (*)(void*, const std::vector<EditorTypePropertyBase*>&, int&)> stringToInitialiseExistingObjectFunction;\n"
 			"}\n";
 }
 
@@ -484,14 +488,14 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			// InitFromPropertiesSubset()
 			{
 				file <<	"// " << name << "\n"
-						"void " << name << "::InitFromPropertiesSubset(void* pObject, const std::vector<EditorTypePropertyBase*>& properties, int& propertyIndex)\n"
+						"void " << name << "::_InitFromPropertiesSubset(void* pObject, const std::vector<EditorTypePropertyBase*>& properties, int& propertyIndex)\n"
 						"{\n" 
 						"\t" << name << "* p" << name << " = static_cast<" << name << "*>(pObject);\n";
 			
 				// Call base class init functions
 				for (std::string baseName : pUDTToken->baseUdtNames)
 				{
-					file << "\t" << baseName << "::InitFromPropertiesSubset(static_cast<" << baseName << "*>(p" << name << "), properties, propertyIndex);\n"; 
+					file << "\t" << baseName << "::_InitFromPropertiesSubset(static_cast<" << baseName << "*>(p" << name << "), properties, propertyIndex);\n"; 
 				}
 
 				// Set properties of this class
@@ -519,22 +523,29 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 
 			// InitFromProperties()
 			file << "}\n\n"
-					"void* " << name << "::InitFromProperties(const std::vector<EditorTypePropertyBase*>& properties)\n"
+					"void* " << name << "::_InitFromProperties(const std::vector<EditorTypePropertyBase*>& properties)\n"
 					"{\n" 
 					"\t" << name << "* p" << name << " = new " << name << ";\n"
 					"\t" << "int propertyIndex = 0;\n"
-					"\t" << name << "::InitFromPropertiesSubset(p" << name << ", properties, propertyIndex);\n"
+					"\t" << name << "::_InitFromPropertiesSubset(p" << name << ", properties, propertyIndex);\n"
 					"\treturn p" << name << ";\n"
+					"}\n\n";
+
+			// CreateEmptyObject()
+			file << "void* " << name << "::_CreateEmptyObject()\n"
+					"{\n" 
+					"\t" "return new " << name << ";\n"
 					"}\n\n";
 		}
 	}
 
+	
 	file << "namespace __Generated\n"
 			"{\n"
+
+	// stringToCreateObjectFunction mappings for all UDT
 			"	std::unordered_map<std::string, void* (*)(const std::vector<EditorTypePropertyBase*>&)> stringToCreateObjectFunction\n"
 			"	{\n";
-
-	// Add all gathered classes to the map of class names to functions
 	for (CodeParseTokenBase* token : allTokens)
 	{
 		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(token))
@@ -542,10 +553,39 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			std::string name = pUDTToken->udtName;
 			
 			// {"MyClass", &MyClass::InitFromProperties},
-			file << "		{\"" << name << "\", &" << name << "::InitFromProperties},\n";
+			file << "		{\"" << name << "\", &" << name << "::_InitFromProperties},\n";
 		}
 	}
+	file << "	};\n\n"
 
+	// stringToCreateEmptyObjectFunction mappings for all UDT 
+	"	std::unordered_map<std::string, void* (*)()> stringToCreateEmptyObjectFunction\n"
+			"	{\n";
+	for (CodeParseTokenBase* token : allTokens)
+	{
+		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(token))
+		{
+			std::string name = pUDTToken->udtName;
+			
+			// {"MyClass", &MyClass::InitFromProperties},
+			file << "		{\"" << name << "\", &" << name << "::_CreateEmptyObject},\n";
+		}
+	}
+	file << "	};\n\n"
+	
+	// stringToInitialiseExistingObjectFunction mappings for all UDT 
+	"	std::unordered_map<std::string, void (*)(void*, const std::vector<EditorTypePropertyBase*>&, int&)> stringToInitialiseExistingObjectFunction\n"
+			"	{\n";
+	for (CodeParseTokenBase* token : allTokens)
+	{
+		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(token))
+		{
+			std::string name = pUDTToken->udtName;
+			
+			// {"MyClass", &MyClass::InitFromProperties},
+			file << "		{\"" << name << "\", &" << name << "::_InitFromPropertiesSubset},\n";
+		}
+	}
 	file << "	};\n"
 			"}\n";
 }
