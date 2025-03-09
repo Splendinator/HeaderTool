@@ -3,12 +3,9 @@
 #include "CodeParseTokenClass.h"
 #include "CodeParseTokenEnum.h"
 #include "CodeParseTokenStruct.h"
+#include "DomLog/DomLog.h"
 #include "HeaderTool.h"
 #include "HeaderToolUtils.h"
-
-#include "DomLog/DomLog.h"
-
-#include "DomWindow/DomWindow.h"
 
 void CodeParseTokenPropertyVector::WriteToFile(std::ofstream& outputFile)
 {
@@ -22,7 +19,6 @@ void CodeParseTokenPropertyVector::WriteToFile(std::ofstream& outputFile)
 			basicType = String;\
 		}\
 	};
-
 	// We don't need to go as granular as "unsigned int 64". The vector just needs to know the general data type "int".
 	// This is because when we come to generating the code, the same code will work for all int types (thanks to implicit casting)
 	MAP_BASIC_TYPE(HeaderToolUtils::floatTypes, "float");
@@ -32,7 +28,6 @@ void CodeParseTokenPropertyVector::WriteToFile(std::ofstream& outputFile)
 	
 	outputFile << "vector " << propertyName << " " << basicType << std::endl;
 }
-
 std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const
 {
 	std::string returnVal = 
@@ -96,7 +91,6 @@ std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::str
 	returnVal +=
 		"\t\t}\n"
 		"\t}\n";
-
 	return returnVal;
 }
 
@@ -109,7 +103,6 @@ CodeParseTokenPropertyVector::EDataTypeClassification CodeParseTokenPropertyVect
 			return EDataTypeClassification::Float;
 		}
 	}
-
 	for (std::string& intType : HeaderToolUtils::intTypes)
 	{
 		if (intType == dataType)
@@ -125,7 +118,6 @@ CodeParseTokenPropertyVector::EDataTypeClassification CodeParseTokenPropertyVect
 			return EDataTypeClassification::Bool;
 		}
 	}
-
 	for (std::string& stringType : HeaderToolUtils::stringTypes)
 	{
 		if (stringType == dataType)
@@ -152,7 +144,6 @@ CodeParseTokenPropertyVector::EDataTypeClassification CodeParseTokenPropertyVect
 			}
 		}
 	}
-
 	DOMLOG_ERROR("Can't find the type", dataType)
 	return EDataTypeClassification::INVALID;
 }

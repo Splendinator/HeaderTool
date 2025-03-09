@@ -444,6 +444,9 @@ void HeaderTool::WriteGlobalHeaderFile(std::ofstream& file)
 			"	// These two combined do the same thing as the top one. These are useful if you want to defer initialising the properties for some reason (we use it for singletons to prevent circular dependencies)\n"
 			"	extern std::unordered_map<std::string, void* (*)()> stringToCreateEmptyObjectFunction;\n"
 			"	extern std::unordered_map<std::string, void (*)(void*, const std::vector<EditorTypePropertyBase*>&, int&)> stringToInitialiseExistingObjectFunction;\n"
+			"\n"
+			"	// Used to delete the void* returned by the above create functions.\n"
+			"	extern std::unordered_map<std::string, void (*)(void*)> stringToDeleteObjectFunction;\n"
 			"}\n";
 }
 
@@ -536,6 +539,12 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 					"{\n" 
 					"\t" "return new " << name << ";\n"
 					"}\n\n";
+
+			// DeleteObject()
+			file << "void " << name << "::_DeleteObject(void* pObject)\n"
+					"{\n" 
+					"\t" "delete reinterpret_cast<" << name << "*>(pObject);\n"
+					"}\n\n";
 		}
 	}
 
@@ -584,6 +593,21 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 			
 			// {"MyClass", &MyClass::InitFromProperties},
 			file << "		{\"" << name << "\", &" << name << "::_InitFromPropertiesSubset},\n";
+		}
+	}
+	file << "	};\n"
+
+	// stringToDeleteObjectFunction mapping for all UDT
+	"	std::unordered_map<std::string, void (*)(void*)> stringToDeleteObjectFunction\n"
+	"	{\n";
+	for (CodeParseTokenBase* token : allTokens)
+	{
+		if (CodeParseTokenUDT* pUDTToken = dynamic_cast<CodeParseTokenUDT*>(token))
+		{
+			std::string name = pUDTToken->udtName;
+			
+			// {"MyClass", &MyClass::InitFromProperties},
+			file << "		{\"" << name << "\", &" << name << "::_DeleteObject},\n";
 		}
 	}
 	file << "	};\n"
