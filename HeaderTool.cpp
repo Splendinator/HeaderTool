@@ -19,8 +19,8 @@
 #include "CodeParseTokenStruct.h"
 #include "DomImport/DomImport.h"
 #include "HeaderToolUtils.h"
-#include "ImGuiEditorGlobals.h"
-#include "ImGuiEditorMacros.h"
+#include "Editor/ImGuiEditorGlobals.h"
+#include "Editor/ImGuiEditorMacros.h"
 
 #include <filesystem>
 #include <fstream>
@@ -455,15 +455,17 @@ void HeaderTool::WriteGlobalCppFile(std::ofstream& file)
 	// Includes
 	file << "#include \"pch.h\"\n"
 			"#include \"" << ImGuiEditorGlobals::generatedFileNames << ".h\"\n"
-			"#include \"EditorTypePropertyClass.h\"\n"
-			"#include \"EditorTypePropertyFloat.h\"\n"
-			"#include \"EditorTypePropertyInt.h\"\n"
-			"#include \"EditorTypePropertyBool.h\"\n"
-			"#include \"EditorTypePropertyString.h\"\n"
-			"#include \"EditorTypePropertyStruct.h\"\n"
-			"#include \"EditorTypePropertyVector.h\"\n"
-			"#include \"EditorTypePropertyEnum.h\"\n"
-			"#include \"EditorTypePropertyInstancedAssetPtr.h\"\n";
+			"#include \"Editor/Types/Properties/EditorTypePropertyClass.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyFloat.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyInt.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyBool.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyString.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyStruct.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyVector.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyEnum.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyInstancedAssetPtr.h\"\n"
+			"#include \"Editor/Types/Properties/EditorTypePropertyDataCompositeProperty.h\"\n";
+	
 	
 
 	

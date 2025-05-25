@@ -1,7 +1,6 @@
 #include "CodeParseTokenFactoryClass.h"
 
 #include "CodeParseTokenClass.h"
-#include "ImGuiEditorMacros.h"
 
 bool CodeParseTokenFactoryClass::IsKeyword(const std::string& keyword)
 {

@@ -151,6 +151,8 @@
     <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagInstanced.cpp" />
     <ClCompile Include="CodeParseTokenFactoryClassMetadataFlagSingleton.cpp" />
     <ClCompile Include="CodeParseTokenFactoryCommentBlock.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyDataCompositeProperty.cpp" />
+    <ClCompile Include="CodeParseTokenPropertyTypeDataCompositeProperty.cpp" />
     <ClCompile Include="CodeParseTokenFactoryEnum.cpp" />
     <ClCompile Include="CodeParseTokenFactoryEnumValue.cpp" />
     <ClCompile Include="CodeParseTokenFactoryProperty.cpp" />
@@ -202,6 +204,8 @@
     <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagInstanced.h" />
     <ClInclude Include="CodeParseTokenFactoryClassMetadataFlagSingleton.h" />
     <ClInclude Include="CodeParseTokenFactoryCommentBlock.h" />
+    <ClInclude Include="CodeParseTokenPropertyDataCompositeProperty.h" />
+    <ClInclude Include="CodeParseTokenPropertyTypeDataCompositeProperty.h" />
     <ClInclude Include="CodeParseTokenFactoryEnum.h" />
     <ClInclude Include="CodeParseTokenFactoryEnumValue.h" />
     <ClInclude Include="CodeParseTokenFactoryProperty.h" />

@@ -1,6 +1,6 @@
 #include "CodeParseTokenDelimiter.h"
 
-#include "ImGuiEditorGlobals.h"
+#include "Editor/ImGuiEditorGlobals.h"
 
 void CodeParseTokenDelimiter::WriteToFile(std::ofstream& outputFile)
 {

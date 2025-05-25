@@ -1,7 +1,6 @@
 ﻿#include "CodeParseTokenFactoryStruct.h"
 
 #include "CodeParseTokenStruct.h"
-#include "ImGuiEditorMacros.h"
 
 bool CodeParseTokenFactoryStruct::IsKeyword(const std::string& keyword)
 {

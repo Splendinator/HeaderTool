@@ -2,6 +2,7 @@
 
 #include "CodeParseTokenPropertyTypeBool.h"
 #include "CodeParseTokenPropertyTypeClass.h"
+#include "CodeParseTokenPropertyTypeDataCompositeProperty.h"
 #include "CodeParseTokenPropertyTypeEnum.h"
 #include "CodeParseTokenPropertyTypeFloat.h"
 #include "CodeParseTokenPropertyTypeInstancedAsset.h"
@@ -9,7 +10,7 @@
 #include "CodeParseTokenPropertyTypeString.h"
 #include "CodeParseTokenPropertyTypeStruct.h"
 #include "CodeParseTokenPropertyTypeVector.h"
-#include "ImGuiEditorMacros.h"
+#include "Editor/ImGuiEditorMacros.h"
 
 class CodeParseTokenPropertyTypeBase;
 
@@ -26,6 +27,7 @@ CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string
 	CodeParseTokenPropertyTypeInt propertyTypeInt;
 	CodeParseTokenPropertyTypeString propertyTypeString;
 	CodeParseTokenPropertyTypeBool propertyTypeBool;
+	CodeParseTokenPropertyTypeDataCompositeProperty propertyTypeDataCompositeProperty;
 	CodeParseTokenPropertyTypeInstancedAsset propertyTypeInstancedAsset;
 	CodeParseTokenPropertyTypeVector propertyTypeVector;
 	CodeParseTokenPropertyTypeClass propertyTypeClass;
@@ -39,6 +41,7 @@ CodeParseTokenBase* CodeParseTokenFactoryProperty::CreateToken(const std::string
 		&propertyTypeString,
 		&propertyTypeBool,
 		&propertyTypeInstancedAsset,
+		&propertyTypeDataCompositeProperty,
 		&propertyTypeVector,
 		&propertyTypeClass,
 		&propertyTypeEnum,

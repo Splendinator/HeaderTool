@@ -1,7 +1,7 @@
 ﻿#include "CodeParseTokenFactoryStructMetadata.h"
 
 #include "CodeParseTokenStructMetadata.h"
-#include "ImGuiEditorMacros.h"
+#include "Editor/ImGuiEditorMacros.h"
 
 bool CodeParseTokenFactoryStructMetadata::IsKeyword(const std::string& keyword)
 {

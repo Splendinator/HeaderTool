@@ -1,5 +1,4 @@
 c:\users\dominic\desktop\tempgame\headertool\x64\release\vc143.pdb
-c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactorystructmetadata.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactorystruct.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryscope.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryproperty.obj
@@ -8,6 +7,7 @@ c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryen
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactorycommentblock.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadataflagsingleton.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadataflaginstanced.obj
+c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadataflageditinlinenew.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadataflagabstract.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadata.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclass.obj
@@ -19,7 +19,6 @@ c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenclassmeta
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenclassmetadata.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenclass.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenbase.obj
-c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertytypevector.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertytypestruct.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertytypestring.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertytypeint.obj
@@ -39,6 +38,7 @@ c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertyc
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertybool.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertybase.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryudt.obj
+c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactorystructmetadata.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\main.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\headertoolutils.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\headertool.obj
@@ -47,7 +47,7 @@ c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenstructmet
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenstruct.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenscope.obj
 c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertyvector.obj
-c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenfactoryclassmetadataflageditinlinenew.obj
+c:\users\dominic\desktop\tempgame\headertool\x64\release\codeparsetokenpropertytypevector.obj
 c:\users\dominic\desktop\tempgame\x64\release\headertool.exe
 c:\users\dominic\desktop\tempgame\x64\release\headertool.pdb
 c:\users\dominic\desktop\tempgame\headertool\x64\release\headertool.ipdb

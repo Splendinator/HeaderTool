@@ -5,7 +5,7 @@
 
 bool CodeParseTokenPropertyTypeInstancedAsset::IsPropertyType(const std::string& property) const
 {
-	const std::string searchString = "TInstancedAssetPtr";
+	const std::string searchString = "InstancedAssetPtr";
 	return property.find(searchString) != std::string::npos;
 }
 
