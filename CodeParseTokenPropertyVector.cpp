@@ -30,6 +30,8 @@ void CodeParseTokenPropertyVector::WriteToFile(std::ofstream& outputFile)
 }
 std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::string& lValueString, const std::string& propertyTypeCode, HeaderTool& headerTool) const
 {
+	// #TODO: Maybe this could be re-done similar to DataCompositeProperty::operator= with the template specialisations? I almost definitely wont ever do this though
+	
 	std::string returnVal = 
 		"{\n"
 		"\t\tEditorTypePropertyVector* pVectorProperty = static_cast<EditorTypePropertyVector*>(" + propertyTypeCode + ");\n"
@@ -72,7 +74,9 @@ std::string CodeParseTokenPropertyVector::GenerateSetPropertyCode(const std::str
 	case EDataTypeClassification::Struct:
 	{
 		returnVal +=
-			"\t\t\t" + lValueString + ".push_back(*static_cast<" + dataType + "*>(static_cast<EditorTypePropertyStruct*>(instancedProperty.get())->GetValue()));\n";
+			"\t\t\t" + dataType + "* temp = static_cast<" + dataType + "*>(static_cast<EditorTypePropertyStruct*>(instancedProperty.get())->GetValue());\n"
+			"\t\t\t" + lValueString + ".push_back(*temp);\n"
+			"\t\t\t" + "delete temp;\n";
 		break;
 	}
 	case EDataTypeClassification::Enum:

@@ -14,15 +14,7 @@ bool CodeParseTokenPropertyTypeDataCompositeProperty::IsPropertyType(const std::
 
 CodeParseTokenBase* CodeParseTokenPropertyTypeDataCompositeProperty::CreateParseTokenType(const std::string& property)
 {
-	// "DataCompositeProperty<float> myFloat;"
-
-	size_t temp = property.find('=');
-	if (temp != std::string::npos)
-	{
-		// #NOTE: Implementing default values for DataCompositeProperties might be easy actually.  
-		DOMLOG_ERROR("We don't support default values for DataCompositeProperties", property);
-		return nullptr;
-	}
+	// "DataCompositeProperty<float> myFloat = 2.0f;"
 
 	size_t typeStartPos = property.find('<');
 	if (typeStartPos == std::string::npos)
@@ -37,13 +29,18 @@ CodeParseTokenBase* CodeParseTokenPropertyTypeDataCompositeProperty::CreateParse
 		DOMLOG_ERROR("Expecting '>'", property);
 		return nullptr;
 	}
-	
-	size_t nameEndPos = property.find(';', typeEndPos);
+
+	size_t nameEndPos = property.find('=', typeEndPos);
 	if (nameEndPos == std::string::npos)
 	{
-		DOMLOG_ERROR("Expecting ';'", property);
+		nameEndPos = property.find(';', typeEndPos);	
+	}
+	if (nameEndPos == std::string::npos)
+	{
+		DOMLOG_ERROR("Expecting ';' or '='", property);
 		return nullptr;
 	}
+	
 	std::string typeName = property.substr(typeStartPos + 1, typeEndPos - typeStartPos - 1);
 	if (typeName.back() == '*')
 	{

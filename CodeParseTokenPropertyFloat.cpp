@@ -1,6 +1,6 @@
 #include "CodeParseTokenPropertyFloat.h"
 
-#include "WritePropertyToFileUtils.h"
+#include "Editor/Types/Properties/WritePropertyToFileUtils.h"
 
 void CodeParseTokenPropertyFloat::WriteToFile(std::ofstream& outputFile)
 {

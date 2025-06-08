@@ -1,6 +1,6 @@
 ﻿#include "CodeParseTokenPropertyInstancedAssetPtr.h"
 
-#include "WritePropertyToFileUtils.h"
+#include "Editor/Types/Properties/WritePropertyToFileUtils.h"
 
 void CodeParseTokenPropertyInstancedAssetPtr::WriteToFile(std::ofstream& outputFile)
 {
